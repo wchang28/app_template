@@ -12,8 +12,8 @@ app.use(function(req, res, next) {
 });
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-app.get('/user/:id', function(req, res) {
-	res.send('user ' + req.params.id);
+app.get('/git_pull/:directory', function(req, res) {
+	res.send('user ' + req.params.directory);
 });
 
 var server = http.createServer(app);
