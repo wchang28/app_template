@@ -14,8 +14,10 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 var server = http.createServer(app);
 
 var secure_http = false;
-var port = 80;
-var host = '127.0.0.1';
+//var port = 80;
+//var host = '127.0.0.1';
+var port = 8000;
+var host = '0.0.0.0';
 
 server.listen(port, host, function() { 
 	var host = server.address().address; 
