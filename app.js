@@ -13,7 +13,7 @@ app.use(function(req, res, next) {
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.get('/git_pull/:directory', function(req, res) {
-	res.send('directory=' + req.params.directory);
+	res.send('directory=' + 'c:/run/scripts/' + req.params.directory);
 });
 
 var server = http.createServer(app);
