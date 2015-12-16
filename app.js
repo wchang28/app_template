@@ -5,7 +5,8 @@ var path = require('path');
 var app = express();
 
 app.use(function(req, res, next) {
-	console.log('incoming request: path='+ req.path);
+	var req_address = req.connection.remoteAddress;
+	console.log('incoming request from ' + req_address + ', path='+ req.path);
 	
 	next();
 });
