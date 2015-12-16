@@ -12,6 +12,10 @@ app.use(function(req, res, next) {
 });
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
+app.get('/user/:id', function(req, res) {
+	res.send('user ' + req.params.id);
+});
+
 var server = http.createServer(app);
 
 var secure_http = false;
