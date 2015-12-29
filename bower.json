@@ -1,0 +1,23 @@
+{
+  "name": "app_template",
+  "description": "Application Template",
+  "main": "app.js",
+  "authors": [
+    "Wen Chang"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/wchang28/app_template",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "font-awesome": "fontawesome#~4.5.0"
+  }
+}
