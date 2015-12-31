@@ -1,4 +1,4 @@
-﻿/* W3.CSS 1.83 by J.E.Refsnes. Do not remove this line. */
+﻿/* W3.CSS 1.85 by J.E.Refsnes. Do not remove this line. */
 *{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
 /* Extract from normalize.css by Nicolas Gallagher and Jonathan Neal git.io/normalize */
 html{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
@@ -65,8 +65,8 @@ table,th,td{border:none}
 .w3-btn.w3-ripple{position:relative}
 .w3-ripple:after{content:"";background:#90EE90;display:block;position:absolute;padding-top:300%;padding-left:350%;margin-left:-20px!important;margin-top:-120%;opacity:0;transition:all 0.8s}
 .w3-ripple:active:after{padding:0;margin:0;opacity:1;transition:0s}
-.w3-badge,.w3-tag{background-color:#000;color:#fff;display:inline-block;padding-left:8px;padding-right:8px;font-weight:bold;text-align:center}
-.w3-badge{border-radius:50%}
+.w3-badge,.w3-tag,.w3-sign{background-color:#000;color:#fff;display:inline-block;padding-left:8px;padding-right:8px;font-weight:bold;text-align:center}
+.w3-badge{border-radius:50%}.w3-sign{padding:2px 12px}
 .w3-blockquote{margin:0;padding:0.01em 16px;border-left:5px solid #ccc;font-style:italic}
 ul.w3-ul{list-style-type:none;padding:0;margin:0}
 ul.w3-ul li{padding:6px 2px 6px 16px;border-bottom:1px solid #ddd}
@@ -290,6 +290,4 @@ position:relative;-webkit-animation-name:animatebottom;-webkit-animation-duratio
 .w3-text-grey{color:#757575 !important}.w3-grey{color:#000 !important;background-color:#9e9e9e !important}
 .w3-text-light-grey{color:#f1f1f1 !important}.w3-light-grey{color:#000;background-color:#f1f1f1 !important}
 .w3-text-dark-grey{color:#3a3a3a !important}.w3-dark-grey{color:white;background-color:#616161 !important}
-.w3-text-white-opacity{color:rgba(255,255,255,0.65) !important}
-.w3-text-black-opacity{color:rgba(0,0,0,0.60) !important}
-.w3-text-shadow{text-shadow:1px 1px 1px #444;letter-spacing:2px}
+.w3-opacity{opacity:0.60}.w3-text-shadow{text-shadow:1px 1px 0 #444}
