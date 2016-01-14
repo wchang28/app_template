@@ -13,8 +13,11 @@ var TypeAhead = React.createClass({
 		this.setState({dropDownVisible: false});
 		document.removeEventListener('click', this.onDocumentClickHook);
 	}
+	,setInputText: function(value) {
+		this.setState({value: value});
+	}
 	,handleInputChange: function (event) {
-		this.setState({value: event.target.value});
+		this.setInputText(event.target.value);
 		if (event.target.value.length >= 3) {
 			if (!this.state.dropDownVisible) this.showDropDown();
 		} else {
