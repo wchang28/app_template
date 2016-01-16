@@ -27,7 +27,7 @@ var MyMatch = React.createClass({
 		});
 	}
 	,getColumns: function(datum) {
-		return [datum.Id, this.props.match, datums.firstName];
+		return [datum.Id, this.props.match, datum.firstName];
 	}
 	,render: function() {
 		var me = this;
