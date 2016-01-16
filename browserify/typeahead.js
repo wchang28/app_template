@@ -16,6 +16,12 @@ var TypeAhead = React.createClass({
 	,setInputText: function(value) {
 		this.setState({value: value});
 	}
+	,getDropdownItemSelectedHandler: function () {
+		var me = this;
+		return (function(value) {
+			console.log("selected: " + value);
+		});
+	}
 	,handleInputChange: function (event) {
 		this.setInputText(event.target.value);
 		var bloodhoundEngine = this.props.bloodhoundEngine;
@@ -30,22 +36,14 @@ var TypeAhead = React.createClass({
 	}
 	,render: function() {
 		var dropdownMenuStyle = (this.state.dropDownVisible ? {display: 'block', zIndex:'1'} : {display:'none',position:'absolute',margin:'0',padding:'0'});
+		var dropdownContentElement = React.createElement(this.props.matchClass, {match: this.state.value, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler()});
+		var dropdownMenuElement = React.createElement('div', {style: dropdownMenuStyle, className: "w3-card-2"}, dropdownContentElement);
 		return React.createElement(
 			'div'
 			,null
 			,React.createElement('input', {className: "w3-input w3-border", type: "text", value: this.state.value, onChange: this.handleInputChange})
-			,React.createElement('div', {style: dropdownMenuStyle, className: "w3-card-2"}, React.createElement(this.props.matchClass, {match: this.state.value}))
+			,dropdownMenuElement
 		);
-		/*
-		return (
-			<div>
-				<input className="w3-input w3-border" type="text" value={this.state.value} onChange={this.handleInputChange}/>
-				<div style={dropdownMenuStyle} className="w3-card-4">
-					<p>Hi, This is Wen</p>
-				</div>
-			</div>
-		);
-		*/
 	}
 });
 
