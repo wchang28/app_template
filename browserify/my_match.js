@@ -20,17 +20,19 @@ var MyMatch = React.createClass({
 		console.log('In MyMatch.componentWillReceiveProps(' + nextProps.match + ')');
 	}
 	,getRowClickHandler: function(rowIndex) {
+		var me = this;
 		return (function() {
-			var value = this.props.datums[rowIndex].Id;
-			this.props.dropdownItemSelectedHandler(value);
+			var value = me.props.datums[rowIndex].Id;
+			me.props.dropdownItemSelectedHandler(value);
 		});
 	}
 	,getColumns: function(datum) {
 		return [datum.Id, this.props.match, datums.firstName];
 	}
 	,render: function() {
+		var me = this;
 		var createRow = function(datum, i) {
-			return <Row onRowClick={this.getRowClickHandler(i)} columns={this.getColumns(datum)} />
+			return <Row onRowClick={me.getRowClickHandler(i)} columns={me.getColumns(datum)} />
 		};
 		return (
 			<table className="w3-table w3-hoverable">

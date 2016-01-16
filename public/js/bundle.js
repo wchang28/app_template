@@ -61,17 +61,19 @@ var MyMatch = React.createClass({
 		console.log('In MyMatch.componentWillReceiveProps(' + nextProps.match + ')');
 	},
 	getRowClickHandler: function getRowClickHandler(rowIndex) {
+		var me = this;
 		return function () {
-			var value = this.props.datums[rowIndex].Id;
-			this.props.dropdownItemSelectedHandler(value);
+			var value = me.props.datums[rowIndex].Id;
+			me.props.dropdownItemSelectedHandler(value);
 		};
 	},
 	getColumns: function getColumns(datum) {
 		return [datum.Id, this.props.match, datums.firstName];
 	},
 	render: function render() {
+		var me = this;
 		var createRow = function createRow(datum, i) {
-			return React.createElement(Row, { onRowClick: this.getRowClickHandler(i), columns: this.getColumns(datum) });
+			return React.createElement(Row, { onRowClick: me.getRowClickHandler(i), columns: me.getColumns(datum) });
 		};
 		return React.createElement(
 			'table',
