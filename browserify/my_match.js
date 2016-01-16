@@ -6,7 +6,7 @@ var Row = React.createClass({
 			return <td>{column}</td>
 		};
 		return (
-			<tr onClick={this.props.onRowClick}>this.columns.map(createColumn)</tr>
+			<tr onClick={this.props.onRowClick}>{this.columns.map(createColumn)}</tr>
 		);
 	}
 });
