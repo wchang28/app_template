@@ -14,13 +14,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://"
+    "url": "git+https://github.com/wchang28/app_template"
   },
   "dependencies": {
     "body-parser": "^1.14.1",
     "express": "^4.13.3",
     "react": "^0.14.3",
-    "react-dom": "^0.14.3"
+    "react-dom": "^0.14.3",
+	"shim-a-window": "git+https://github.com/wchang28/shim-a-window.git",
+	"bloodhound": "git+https://github.com/wchang28/bloodhound.git"
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.3.13",
