@@ -44,7 +44,7 @@ var Row = React.createClass({
 		};
 		return React.createElement(
 			'tr',
-			{ key: this.props.key, onClick: this.props.onRowClick },
+			{ onClick: this.props.onRowClick },
 			this.props.columns.map(createColumn)
 		);
 	}
