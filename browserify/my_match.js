@@ -20,6 +20,7 @@ var MyMatch = React.createClass({
 		console.log('In MyMatch.componentWillReceiveProps(' + nextProps.match + ')');
 	}
 	,getRowClickHandler: function(datum) {
+		var me = this;
 		return (function() {
 			var value = datum.Id;
 			me.props.dropdownItemSelectedHandler(value);
