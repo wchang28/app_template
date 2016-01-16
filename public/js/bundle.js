@@ -31,6 +31,25 @@ promise.done(function () {
 
 var React = require('react');
 
+var Row = React.createClass({
+	displayName: 'Row',
+
+	render: function render() {
+		var createColumn = function createColumn(column) {
+			return React.createElement(
+				'td',
+				null,
+				column
+			);
+		};
+		return React.createElement(
+			'tr',
+			{ onClick: this.props.onRowClick },
+			'this.columns.map(createColumn)'
+		);
+	}
+});
+
 var MyMatch = React.createClass({
 	displayName: 'MyMatch',
 
@@ -41,7 +60,19 @@ var MyMatch = React.createClass({
 	componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 		console.log('In MyMatch.componentWillReceiveProps(' + nextProps.match + ')');
 	},
+	getRowClickHandler: function getRowClickHandler(rowIndex) {
+		return function () {
+			var value = this.props.datums[rowIndex].Id;
+			this.props.dropdownItemSelectedHandler(value);
+		};
+	},
+	getColumns: function getColumns(datum) {
+		return [datum.Id, this.props.match, datums.firstName];
+	},
 	render: function render() {
+		var createRow = function createRow(datum, i) {
+			return React.createElement(Row, { onRowClick: this.getRowClickHandler(i), columns: this.getColumns(datum) });
+		};
 		return React.createElement(
 			'table',
 			{ className: 'w3-table w3-hoverable' },
@@ -54,7 +85,7 @@ var MyMatch = React.createClass({
 					React.createElement(
 						'th',
 						null,
-						'First Name'
+						'Id'
 					),
 					React.createElement(
 						'th',
@@ -64,70 +95,14 @@ var MyMatch = React.createClass({
 					React.createElement(
 						'th',
 						null,
-						'Points'
+						'First Name'
 					)
 				)
 			),
 			React.createElement(
 				'tbody',
 				null,
-				React.createElement(
-					'tr',
-					null,
-					React.createElement(
-						'td',
-						null,
-						'Jill'
-					),
-					React.createElement(
-						'td',
-						null,
-						this.props.match
-					),
-					React.createElement(
-						'td',
-						null,
-						'50'
-					)
-				),
-				React.createElement(
-					'tr',
-					null,
-					React.createElement(
-						'td',
-						null,
-						'Eve'
-					),
-					React.createElement(
-						'td',
-						null,
-						this.props.match
-					),
-					React.createElement(
-						'td',
-						null,
-						'94'
-					)
-				),
-				React.createElement(
-					'tr',
-					null,
-					React.createElement(
-						'td',
-						null,
-						'Adam'
-					),
-					React.createElement(
-						'td',
-						null,
-						this.props.match
-					),
-					React.createElement(
-						'td',
-						null,
-						'67'
-					)
-				)
+				this.props.datums.map(createRow)
 			)
 		);
 	}
@@ -179,8 +154,9 @@ var TypeAhead = React.createClass({
 		}
 	},
 	render: function render() {
+		var datums = [{ "Id": 1, "firstName": "Wen" }, { "Id": 2, "firstName": "Elva" }, { "Id": 3, "firstName": "Winston" }, { "Id": 4, "firstName": "Evelyn" }];
 		var dropdownMenuStyle = this.state.dropDownVisible ? { display: 'block', zIndex: '1' } : { display: 'none', position: 'absolute', margin: '0', padding: '0' };
-		var dropdownContentElement = React.createElement(this.props.matchClass, { match: this.state.value, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler() });
+		var dropdownContentElement = React.createElement(this.props.matchClass, { match: this.state.value, datums: datums, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler() });
 		var dropdownMenuElement = React.createElement('div', { style: dropdownMenuStyle, className: "w3-card-2" }, dropdownContentElement);
 		return React.createElement('div', null, React.createElement('input', { className: "w3-input w3-border", type: "text", value: this.state.value, onChange: this.handleInputChange }), dropdownMenuElement);
 	}

@@ -35,8 +35,15 @@ var TypeAhead = React.createClass({
 		}
 	}
 	,render: function() {
+		var datums =
+		[
+			{"Id": 1, "firstName": "Wen"}
+			,{"Id": 2, "firstName": "Elva"}
+			,{"Id": 3, "firstName": "Winston"}
+			,{"Id": 4, "firstName": "Evelyn"}
+		]
 		var dropdownMenuStyle = (this.state.dropDownVisible ? {display: 'block', zIndex:'1'} : {display:'none',position:'absolute',margin:'0',padding:'0'});
-		var dropdownContentElement = React.createElement(this.props.matchClass, {match: this.state.value, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler()});
+		var dropdownContentElement = React.createElement(this.props.matchClass, {match: this.state.value, datums: datums, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler()});
 		var dropdownMenuElement = React.createElement('div', {style: dropdownMenuStyle, className: "w3-card-2"}, dropdownContentElement);
 		return React.createElement(
 			'div'
