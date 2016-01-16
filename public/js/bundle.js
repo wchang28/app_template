@@ -44,7 +44,7 @@ var Row = React.createClass({
 		};
 		return React.createElement(
 			'tr',
-			{ onClick: this.props.onRowClick },
+			{ key: this.props.key, onClick: this.props.onRowClick },
 			this.props.columns.map(createColumn)
 		);
 	}
@@ -73,7 +73,7 @@ var MyMatch = React.createClass({
 	render: function render() {
 		var me = this;
 		var createRow = function createRow(datum) {
-			return React.createElement(Row, { onRowClick: me.getRowClickHandler(datum), columns: me.getColumns(datum) });
+			return React.createElement(Row, { key: datum.Id, onRowClick: me.getRowClickHandler(datum), columns: me.getColumns(datum) });
 		};
 		return React.createElement(
 			'table',
