@@ -6,7 +6,7 @@ var Row = React.createClass({
 			return <td>{column}</td>
 		};
 		return (
-			<tr onClick={this.props.onRowClick}>{this.columns.map(createColumn)}</tr>
+			<tr onClick={this.props.onRowClick}>{this.props.columns.map(createColumn)}</tr>
 		);
 	}
 });
@@ -19,10 +19,9 @@ var MyMatch = React.createClass({
 	,componentWillReceiveProps: function(nextProps) {
 		console.log('In MyMatch.componentWillReceiveProps(' + nextProps.match + ')');
 	}
-	,getRowClickHandler: function(rowIndex) {
-		var me = this;
+	,getRowClickHandler: function(datum) {
 		return (function() {
-			var value = me.props.datums[rowIndex].Id;
+			var value = datum.Id;
 			me.props.dropdownItemSelectedHandler(value);
 		});
 	}
@@ -31,8 +30,8 @@ var MyMatch = React.createClass({
 	}
 	,render: function() {
 		var me = this;
-		var createRow = function(datum, i) {
-			return <Row onRowClick={me.getRowClickHandler(i)} columns={me.getColumns(datum)} />
+		var createRow = function(datum) {
+			return <Row onRowClick={me.getRowClickHandler(datum)} columns={me.getColumns(datum)} />
 		};
 		return (
 			<table className="w3-table w3-hoverable">

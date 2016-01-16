@@ -45,7 +45,7 @@ var Row = React.createClass({
 		return React.createElement(
 			'tr',
 			{ onClick: this.props.onRowClick },
-			this.columns.map(createColumn)
+			this.props.columns.map(createColumn)
 		);
 	}
 });
@@ -60,10 +60,9 @@ var MyMatch = React.createClass({
 	componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 		console.log('In MyMatch.componentWillReceiveProps(' + nextProps.match + ')');
 	},
-	getRowClickHandler: function getRowClickHandler(rowIndex) {
-		var me = this;
+	getRowClickHandler: function getRowClickHandler(datum) {
 		return function () {
-			var value = me.props.datums[rowIndex].Id;
+			var value = datum.Id;
 			me.props.dropdownItemSelectedHandler(value);
 		};
 	},
@@ -72,8 +71,8 @@ var MyMatch = React.createClass({
 	},
 	render: function render() {
 		var me = this;
-		var createRow = function createRow(datum, i) {
-			return React.createElement(Row, { onRowClick: me.getRowClickHandler(i), columns: me.getColumns(datum) });
+		var createRow = function createRow(datum) {
+			return React.createElement(Row, { onRowClick: me.getRowClickHandler(datum), columns: me.getColumns(datum) });
 		};
 		return React.createElement(
 			'table',
