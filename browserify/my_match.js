@@ -2,8 +2,8 @@ var React = require('react');
 
 var Row = React.createClass({
 	render: function() {
-		var createColumn = function(column) {
-			return <td>{column}</td>
+		var createColumn = function(column, i) {
+			return <td key={i}>{column}</td>
 		};
 		return (
 			<tr onClick={this.props.onRowClick}>{this.props.columns.map(createColumn)}</tr>

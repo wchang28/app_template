@@ -35,10 +35,10 @@ var Row = React.createClass({
 	displayName: 'Row',
 
 	render: function render() {
-		var createColumn = function createColumn(column) {
+		var createColumn = function createColumn(column, i) {
 			return React.createElement(
 				'td',
-				null,
+				{ key: i },
 				column
 			);
 		};
