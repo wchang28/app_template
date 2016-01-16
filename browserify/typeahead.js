@@ -18,6 +18,10 @@ var TypeAhead = React.createClass({
 	}
 	,handleInputChange: function (event) {
 		this.setInputText(event.target.value);
+		var bloodhoundEngine = this.props.bloodhoundEngine;
+		bloodhoundEngine.search(event.target.value, function(datums) {
+			console.log(JSON.stringify(datums));
+		});
 		if (event.target.value.length >= 3) {
 			if (!this.state.dropDownVisible) this.showDropDown();
 		} else {
