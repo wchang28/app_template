@@ -3,13 +3,28 @@
 
 var React = require('react');
 var ReactDOM = require('react-dom');
-var MyMatch = require('./my_match');
-var TypeAhead = require('./typeahead');
 var $ = require('jquery');
 var BloodhoundFactory = require('bloodhound');
 var Bloodhound = BloodhoundFactory($);
 
-ReactDOM.render(React.createElement(TypeAhead, { matchClass: MyMatch }), document.getElementById('test'));
+var MyMatch = require('./my_match');
+var TypeAhead = require('./typeahead');
+
+var engine = new Bloodhound({
+  initialize: false,
+  local: ['dog', 'pig', 'moose'],
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  datumTokenizer: Bloodhound.tokenizers.whitespace
+});
+
+var promise = engine.initialize();
+
+promise.done(function () {
+  console.log('ready to go!');
+  ReactDOM.render(React.createElement(TypeAhead, { matchClass: MyMatch, bloodhoundEngine: engine }), document.getElementById('test'));
+}).fail(function () {
+  console.log('err, something went wrong :(');
+});
 
 },{"./my_match":2,"./typeahead":3,"bloodhound":4,"jquery":33,"react":164,"react-dom":35}],2:[function(require,module,exports){
 'use strict';
