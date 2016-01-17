@@ -17,17 +17,21 @@
 		}
 		,setInputText: function(value) {
 			this.setState({value: value});
+			this.notifyQueryChanged();
+		}
+		,notifyQueryChanged: function() {
+			if (typeof this.props.onQueryChanged === 'function') this.props.onQueryChanged(this.state.value);
 		}
 		,getDropdownItemSelectedHandler: function () {
-			return (value) => {
-				this.setInputText(value);
+			return (selectedValue) => {
+				if (selectedValue !== this.state.value)
+					this.setInputText(selectedValue);
 			};
 		}
 		,handleInputChange: function (event) {
 			console.log("begin handleInputChange()");
 			var query = event.target.value;
 			this.setInputText(query);
-			
 			var suggestionEngine = this.props.suggestionEngine;
 			suggestionEngine.search(query, function(datums) {
 				console.log('search result:');

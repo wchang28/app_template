@@ -10,20 +10,24 @@ var Bloodhound = BloodhoundFactory($);
 var MyMatch = require('./my_match');
 var TypeAhead = require('./typeahead');
 
+function onQueryChanged(query) {
+	console.log('onQueryChanged(' + query + ')');
+}
+
 var engine = new Bloodhound({
-  initialize: false,
-  local: ['dog', 'pig', 'moose'],
-  queryTokenizer: Bloodhound.tokenizers.whitespace,
-  datumTokenizer: Bloodhound.tokenizers.whitespace
+	initialize: false,
+	local: ['dog', 'pig', 'moose'],
+	queryTokenizer: Bloodhound.tokenizers.whitespace,
+	datumTokenizer: Bloodhound.tokenizers.whitespace
 });
 
 var promise = engine.initialize();
 
 promise.done(function () {
-  console.log('ready to go!');
-  ReactDOM.render(React.createElement(TypeAhead, { matchClass: MyMatch, suggestionEngine: engine }), document.getElementById('test'));
+	console.log('ready to go!');
+	ReactDOM.render(React.createElement(TypeAhead, { matchClass: MyMatch, suggestionEngine: engine, onQueryChanged: onQueryChanged }), document.getElementById('test'));
 }).fail(function () {
-  console.log('err, something went wrong :(');
+	console.log('err, something went wrong :(');
 });
 
 },{"./my_match":2,"./typeahead":3,"bloodhound":4,"jquery":33,"react":164,"react-dom":35}],2:[function(require,module,exports){
@@ -139,19 +143,22 @@ module.exports = MyMatch;
 		},
 		setInputText: function setInputText(value) {
 			this.setState({ value: value });
+			this.notifyQueryChanged();
+		},
+		notifyQueryChanged: function notifyQueryChanged() {
+			if (typeof this.props.onQueryChanged === 'function') this.props.onQueryChanged(this.state.value);
 		},
 		getDropdownItemSelectedHandler: function getDropdownItemSelectedHandler() {
 			var _this = this;
 
-			return function (value) {
-				_this.setInputText(value);
+			return function (selectedValue) {
+				if (selectedValue !== _this.state.value) _this.setInputText(selectedValue);
 			};
 		},
 		handleInputChange: function handleInputChange(event) {
 			console.log("begin handleInputChange()");
 			var query = event.target.value;
 			this.setInputText(query);
-
 			var suggestionEngine = this.props.suggestionEngine;
 			suggestionEngine.search(query, function (datums) {
 				console.log('search result:');
