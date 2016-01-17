@@ -33,89 +33,92 @@ promise.done(function () {
 },{"./my_match":2,"./typeahead":3,"bloodhound":4,"jquery":33,"react":164,"react-dom":35}],2:[function(require,module,exports){
 'use strict';
 
-var React = require('react');
+(function (root, factory) {
+	module.exports = factory();
+})(undefined, function () {
+	var React = require('react');
 
-var Row = React.createClass({
-	displayName: 'Row',
+	var Row = React.createClass({
+		displayName: 'Row',
 
-	render: function render() {
-		var createCell = function createCell(cellValue, columnIndex) {
+		render: function render() {
+			var createCell = function createCell(cellValue, columnIndex) {
+				return React.createElement(
+					'td',
+					{ key: columnIndex },
+					cellValue
+				);
+			};
 			return React.createElement(
-				'td',
-				{ key: columnIndex },
-				cellValue
+				'tr',
+				{ onClick: this.props.onRowClick },
+				this.props.rowValues.map(createCell)
 			);
-		};
-		return React.createElement(
-			'tr',
-			{ onClick: this.props.onRowClick },
-			this.props.rowValues.map(createCell)
-		);
-	}
-});
+		}
+	});
 
-var MyMatch = React.createClass({
-	displayName: 'MyMatch',
+	var MyMatch = React.createClass({
+		displayName: 'MyMatch',
 
-	getInitialState: function getInitialState() {
-		console.log('In MyMatch.getInitialState(' + this.props.query + ')');
-		return {};
-	},
-	componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-		console.log('In MyMatch.componentWillReceiveProps(' + nextProps.query + ')');
-	},
-	getRowClickHandler: function getRowClickHandler(datum) {
-		var _this = this;
+		getInitialState: function getInitialState() {
+			console.log('In MyMatch.getInitialState(' + this.props.query + ')');
+			return {};
+		},
+		componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+			console.log('In MyMatch.componentWillReceiveProps(' + nextProps.query + ')');
+		},
+		getRowClickHandler: function getRowClickHandler(datum) {
+			var _this = this;
 
-		return function () {
-			_this.props.dropdownItemSelectedHandler(datum.Id);
-		};
-	},
-	getRowValues: function getRowValues(datum) {
-		return [datum.Id, this.props.query, datum.firstName];
-	},
-	render: function render() {
-		var _this2 = this;
+			return function () {
+				_this.props.dropdownItemSelectedHandler(datum.Id);
+			};
+		},
+		getRowValues: function getRowValues(datum) {
+			return [datum.Id, this.props.query, datum.firstName];
+		},
+		render: function render() {
+			var _this2 = this;
 
-		var createRow = function createRow(datum) {
-			return React.createElement(Row, { key: datum.Id, onRowClick: _this2.getRowClickHandler(datum), rowValues: _this2.getRowValues(datum) });
-		};
-		return React.createElement(
-			'table',
-			{ className: 'w3-table w3-hoverable' },
-			React.createElement(
-				'thead',
-				null,
+			var createRow = function createRow(datum) {
+				return React.createElement(Row, { key: datum.Id, onRowClick: _this2.getRowClickHandler(datum), rowValues: _this2.getRowValues(datum) });
+			};
+			return React.createElement(
+				'table',
+				{ className: 'w3-table w3-hoverable' },
 				React.createElement(
-					'tr',
-					{ className: 'w3-light-grey' },
+					'thead',
+					null,
 					React.createElement(
-						'th',
-						null,
-						'Id'
-					),
-					React.createElement(
-						'th',
-						null,
-						'Last Name'
-					),
-					React.createElement(
-						'th',
-						null,
-						'First Name'
+						'tr',
+						{ className: 'w3-light-grey' },
+						React.createElement(
+							'th',
+							null,
+							'Id'
+						),
+						React.createElement(
+							'th',
+							null,
+							'Last Name'
+						),
+						React.createElement(
+							'th',
+							null,
+							'First Name'
+						)
 					)
+				),
+				React.createElement(
+					'tbody',
+					null,
+					this.props.datums.map(createRow)
 				)
-			),
-			React.createElement(
-				'tbody',
-				null,
-				this.props.datums.map(createRow)
-			)
-		);
-	}
+			);
+		}
+	});
+	return MyMatch;
 });
-
-module.exports = MyMatch;
 
 },{"react":164}],3:[function(require,module,exports){
 'use strict';
