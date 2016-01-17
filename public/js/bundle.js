@@ -116,63 +116,64 @@ module.exports = MyMatch;
 },{"react":164}],3:[function(require,module,exports){
 'use strict';
 
-var React = require('react');
+(function (root, factory) {
+	module.exports = factory();
+})(undefined, function () {
+	var React = require('react');
+	var TypeAhead = React.createClass({
+		displayName: 'TypeAhead',
 
-var TypeAhead = React.createClass({
-	displayName: 'TypeAhead',
+		getInitialState: function getInitialState() {
+			return { value: '', dropDownVisible: false };
+		},
+		onDocumentClickHook: function onDocumentClickHook() {
+			this.closeDropDown();
+		},
+		showDropDown: function showDropDown() {
+			this.setState({ dropDownVisible: true });
+			document.addEventListener('click', this.onDocumentClickHook);
+		},
+		closeDropDown: function closeDropDown() {
+			this.setState({ dropDownVisible: false });
+			document.removeEventListener('click', this.onDocumentClickHook);
+		},
+		setInputText: function setInputText(value) {
+			this.setState({ value: value });
+		},
+		getDropdownItemSelectedHandler: function getDropdownItemSelectedHandler() {
+			var _this = this;
 
-	getInitialState: function getInitialState() {
-		return { value: '', dropDownVisible: false };
-	},
-	onDocumentClickHook: function onDocumentClickHook() {
-		this.closeDropDown();
-	},
-	showDropDown: function showDropDown() {
-		this.setState({ dropDownVisible: true });
-		document.addEventListener('click', this.onDocumentClickHook);
-	},
-	closeDropDown: function closeDropDown() {
-		this.setState({ dropDownVisible: false });
-		document.removeEventListener('click', this.onDocumentClickHook);
-	},
-	setInputText: function setInputText(value) {
-		this.setState({ value: value });
-	},
-	getDropdownItemSelectedHandler: function getDropdownItemSelectedHandler() {
-		var _this = this;
+			return function (value) {
+				_this.setInputText(value);
+			};
+		},
+		handleInputChange: function handleInputChange(event) {
+			console.log("begin handleInputChange()");
+			var query = event.target.value;
+			this.setInputText(query);
 
-		return function (value) {
-			//alert("selected: " + value);
-			_this.setInputText(value);
-		};
-	},
-	handleInputChange: function handleInputChange(event) {
-		console.log("begin handleInputChange()");
-		var query = event.target.value;
-		this.setInputText(query);
-
-		var suggestionEngine = this.props.suggestionEngine;
-		suggestionEngine.search(query, function (datums) {
-			console.log('search result:');
-			console.log(JSON.stringify(datums));
-		});
-		if (query.length >= 3) {
-			if (!this.state.dropDownVisible) this.showDropDown();
-		} else {
-			if (this.state.dropDownVisible) this.closeDropDown();
+			var suggestionEngine = this.props.suggestionEngine;
+			suggestionEngine.search(query, function (datums) {
+				console.log('search result:');
+				console.log(JSON.stringify(datums));
+			});
+			if (query.length >= 3) {
+				if (!this.state.dropDownVisible) this.showDropDown();
+			} else {
+				if (this.state.dropDownVisible) this.closeDropDown();
+			}
+			console.log("end handleInputChange()");
+		},
+		render: function render() {
+			var datums = [{ "Id": 1, "firstName": "Wen" }, { "Id": 2, "firstName": "Elva" }, { "Id": 3, "firstName": "Winston" }, { "Id": 4, "firstName": "Evelyn" }];
+			var dropdownMenuStyle = this.state.dropDownVisible ? { display: 'block', zIndex: '1' } : { display: 'none', position: 'absolute', margin: '0', padding: '0' };
+			var dropdownContentElement = React.createElement(this.props.matchClass, { query: this.state.value, datums: datums, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler() });
+			var dropdownMenuElement = React.createElement('div', { style: dropdownMenuStyle, className: "w3-card-2" }, dropdownContentElement);
+			return React.createElement('div', null, React.createElement('input', { className: "w3-input w3-border", type: "text", value: this.state.value, onChange: this.handleInputChange }), dropdownMenuElement);
 		}
-		console.log("end handleInputChange()");
-	},
-	render: function render() {
-		var datums = [{ "Id": 1, "firstName": "Wen" }, { "Id": 2, "firstName": "Elva" }, { "Id": 3, "firstName": "Winston" }, { "Id": 4, "firstName": "Evelyn" }];
-		var dropdownMenuStyle = this.state.dropDownVisible ? { display: 'block', zIndex: '1' } : { display: 'none', position: 'absolute', margin: '0', padding: '0' };
-		var dropdownContentElement = React.createElement(this.props.matchClass, { query: this.state.value, datums: datums, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler() });
-		var dropdownMenuElement = React.createElement('div', { style: dropdownMenuStyle, className: "w3-card-2" }, dropdownContentElement);
-		return React.createElement('div', null, React.createElement('input', { className: "w3-input w3-border", type: "text", value: this.state.value, onChange: this.handleInputChange }), dropdownMenuElement);
-	}
+	});
+	return TypeAhead;
 });
-
-module.exports = TypeAhead;
 
 },{"react":164}],4:[function(require,module,exports){
 module.exports = require('./lib/bloodhound.js');
