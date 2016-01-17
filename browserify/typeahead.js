@@ -17,19 +17,17 @@
 		}
 		,setInputText: function(value) {
 			this.setState({value: value});
-			this.notifyQueryChanged();
+			this.notifyQueryChanged(value);
 		}
-		,notifyQueryChanged: function() {
-			if (typeof this.props.onQueryChanged === 'function') this.props.onQueryChanged(this.state.value);
+		,notifyQueryChanged: function(value) {
+			if (typeof this.props.onQueryChanged === 'function') this.props.onQueryChanged(value);
 		}
 		,getDropdownItemSelectedHandler: function () {
 			return (selectedValue) => {
-				if (selectedValue !== this.state.value)
-					this.setInputText(selectedValue);
+				this.setInputText(selectedValue);
 			};
 		}
 		,handleInputChange: function (event) {
-			console.log("begin handleInputChange()");
 			var query = event.target.value;
 			this.setInputText(query);
 			var suggestionEngine = this.props.suggestionEngine;
@@ -42,7 +40,6 @@
 			} else {
 				if (this.state.dropDownVisible) this.closeDropDown();
 			}
-			console.log("end handleInputChange()");
 		}
 		,render: function() {
 			var datums =

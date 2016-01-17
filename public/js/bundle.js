@@ -143,20 +143,19 @@ module.exports = MyMatch;
 		},
 		setInputText: function setInputText(value) {
 			this.setState({ value: value });
-			this.notifyQueryChanged();
+			this.notifyQueryChanged(value);
 		},
-		notifyQueryChanged: function notifyQueryChanged() {
-			if (typeof this.props.onQueryChanged === 'function') this.props.onQueryChanged(this.state.value);
+		notifyQueryChanged: function notifyQueryChanged(value) {
+			if (typeof this.props.onQueryChanged === 'function') this.props.onQueryChanged(value);
 		},
 		getDropdownItemSelectedHandler: function getDropdownItemSelectedHandler() {
 			var _this = this;
 
 			return function (selectedValue) {
-				if (selectedValue !== _this.state.value) _this.setInputText(selectedValue);
+				_this.setInputText(selectedValue);
 			};
 		},
 		handleInputChange: function handleInputChange(event) {
-			console.log("begin handleInputChange()");
 			var query = event.target.value;
 			this.setInputText(query);
 			var suggestionEngine = this.props.suggestionEngine;
@@ -169,7 +168,6 @@ module.exports = MyMatch;
 			} else {
 				if (this.state.dropDownVisible) this.closeDropDown();
 			}
-			console.log("end handleInputChange()");
 		},
 		render: function render() {
 			var datums = [{ "Id": 1, "firstName": "Wen" }, { "Id": 2, "firstName": "Elva" }, { "Id": 3, "firstName": "Winston" }, { "Id": 4, "firstName": "Evelyn" }];
