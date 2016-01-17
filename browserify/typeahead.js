@@ -56,7 +56,7 @@
 					<input className="w3-input w3-border" type="text" value={this.state.value} onChange={this.handleInputChange}/>
 					<div style={dropdownMenuStyle} className="w3-card-2">
 						{dropdownContentElement}
-					</div>;
+					</div>
 				</div>
 			);
 		}

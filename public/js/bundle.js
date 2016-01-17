@@ -181,8 +181,7 @@ module.exports = MyMatch;
 					'div',
 					{ style: dropdownMenuStyle, className: 'w3-card-2' },
 					dropdownContentElement
-				),
-				';'
+				)
 			);
 		}
 	});
