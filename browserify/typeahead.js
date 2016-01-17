@@ -17,14 +17,15 @@ var TypeAhead = React.createClass({
 		this.setState({value: value});
 	}
 	,getDropdownItemSelectedHandler: function () {
-		var me = this;
-		return (function(value) {
+		return (value) => {
 			alert("selected: " + value);
-		});
+		};
 	}
 	,handleInputChange: function (event) {
+		console.log("begin handleInputChange()");
 		var query = event.target.value;
 		this.setInputText(query);
+		
 		var suggestionEngine = this.props.suggestionEngine;
 		suggestionEngine.search(query, function(datums) {
 			console.log(JSON.stringify(datums));
@@ -34,6 +35,7 @@ var TypeAhead = React.createClass({
 		} else {
 			if (this.state.dropDownVisible) this.closeDropDown();
 		}
+		console.log("end handleInputChange()");
 	}
 	,render: function() {
 		var datums =

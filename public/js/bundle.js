@@ -139,14 +139,15 @@ var TypeAhead = React.createClass({
 		this.setState({ value: value });
 	},
 	getDropdownItemSelectedHandler: function getDropdownItemSelectedHandler() {
-		var me = this;
 		return function (value) {
 			alert("selected: " + value);
 		};
 	},
 	handleInputChange: function handleInputChange(event) {
+		console.log("begin handleInputChange()");
 		var query = event.target.value;
 		this.setInputText(query);
+
 		var suggestionEngine = this.props.suggestionEngine;
 		suggestionEngine.search(query, function (datums) {
 			console.log(JSON.stringify(datums));
@@ -156,6 +157,7 @@ var TypeAhead = React.createClass({
 		} else {
 			if (this.state.dropDownVisible) this.closeDropDown();
 		}
+		console.log("end handleInputChange()");
 	},
 	render: function render() {
 		var datums = [{ "Id": 1, "firstName": "Wen" }, { "Id": 2, "firstName": "Elva" }, { "Id": 3, "firstName": "Winston" }, { "Id": 4, "firstName": "Evelyn" }];
