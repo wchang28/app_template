@@ -52,16 +52,8 @@
 			var inputElement = <input className="w3-input w3-border" type="text" value={this.state.value} onChange={this.handleInputChange} />
 			var dropdownMenuStyle = (this.state.dropDownVisible ? {display: 'block', zIndex:'1'} : {display:'none',position:'absolute',margin:'0',padding:'0'});
 			var dropdownContentElement = React.createElement(this.props.matchClass, {query: this.state.value, datums: datums, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler()});
-			var dropdownMenuElement = React.createElement('div', {style: dropdownMenuStyle, className: "w3-card-2"}, dropdownContentElement);
+			var dropdownMenuElement = <div style={dropdownMenuStyle} className="w3-card-2">{dropdownContentElement}</div>;
 			return <div>{inputElement}{dropdownMenuElement}</div>;
-			/*
-			return React.createElement(
-				'div'
-				,null
-				,inputElement
-				,dropdownMenuElement
-			);
-			*/
 		}
 	});
 	return TypeAhead;
