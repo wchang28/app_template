@@ -39,17 +39,17 @@ var Row = React.createClass({
 	displayName: 'Row',
 
 	render: function render() {
-		var createColumn = function createColumn(column, i) {
+		var createCell = function createCell(cellValue, columnIndex) {
 			return React.createElement(
 				'td',
-				{ key: i },
-				column
+				{ key: columnIndex },
+				cellValue
 			);
 		};
 		return React.createElement(
 			'tr',
 			{ onClick: this.props.onRowClick },
-			this.props.columns.map(createColumn)
+			this.props.rowValues.map(createCell)
 		);
 	}
 });
@@ -71,14 +71,14 @@ var MyMatch = React.createClass({
 			_this.props.dropdownItemSelectedHandler(datum.Id);
 		};
 	},
-	getColumns: function getColumns(datum) {
+	getRowValues: function getRowValues(datum) {
 		return [datum.Id, this.props.query, datum.firstName];
 	},
 	render: function render() {
 		var _this2 = this;
 
 		var createRow = function createRow(datum) {
-			return React.createElement(Row, { key: datum.Id, onRowClick: _this2.getRowClickHandler(datum), columns: _this2.getColumns(datum) });
+			return React.createElement(Row, { key: datum.Id, onRowClick: _this2.getRowClickHandler(datum), rowValues: _this2.getRowValues(datum) });
 		};
 		return React.createElement(
 			'table',

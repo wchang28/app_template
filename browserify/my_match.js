@@ -2,9 +2,9 @@ var React = require('react');
 
 var Row = React.createClass({
 	render: function() {
-		var createColumn = (column, i) => <td key={i}>{column}</td>;
+		var createCell = (cellValue, columnIndex) => <td key={columnIndex}>{cellValue}</td>;
 		return (
-			<tr onClick={this.props.onRowClick}>{this.props.columns.map(createColumn)}</tr>
+			<tr onClick={this.props.onRowClick}>{this.props.rowValues.map(createCell)}</tr>
 		);
 	}
 });
@@ -22,11 +22,11 @@ var MyMatch = React.createClass({
 			this.props.dropdownItemSelectedHandler(datum.Id)
 		};
 	}
-	,getColumns: function(datum) {
+	,getRowValues: function(datum) {
 		return [datum.Id, this.props.query, datum.firstName];
 	}
 	,render: function() {
-		var createRow = (datum) => <Row key={datum.Id} onRowClick={this.getRowClickHandler(datum)} columns={this.getColumns(datum)} />
+		var createRow = (datum) => <Row key={datum.Id} onRowClick={this.getRowClickHandler(datum)} rowValues={this.getRowValues(datum)} />
 		return (
 			<table className="w3-table w3-hoverable">
 				<thead>
