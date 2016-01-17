@@ -17,6 +17,7 @@
 		}
 		,setInputText: function(value) {
 			this.setState({value: value});
+			console.log('after setState(), (' + value + ','+ this.state.value + ')');
 			this.notifyQueryChanged(value);
 		}
 		,notifyQueryChanged: function(value) {

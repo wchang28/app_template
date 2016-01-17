@@ -143,6 +143,7 @@ module.exports = MyMatch;
 		},
 		setInputText: function setInputText(value) {
 			this.setState({ value: value });
+			console.log('after setState(), (' + value + ',' + this.state.value + ')');
 			this.notifyQueryChanged(value);
 		},
 		notifyQueryChanged: function notifyQueryChanged(value) {
