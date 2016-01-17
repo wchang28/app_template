@@ -55,6 +55,7 @@ var MyMatch = React.createClass({
 
 	getInitialState: function getInitialState() {
 		console.log('In MyMatch.getInitialState(' + this.props.query + ')');
+		return {};
 	},
 	componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 		console.log('In MyMatch.componentWillReceiveProps(' + nextProps.query + ')');
