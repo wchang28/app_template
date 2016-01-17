@@ -11,11 +11,10 @@ var Row = React.createClass({
 
 var MyMatch = React.createClass({
 	getInitialState: function() {
-		console.log('In MyMatch.getInitialState(' + this.props.match + ')');
-		return {matchedItems: []};
+		console.log('In MyMatch.getInitialState(' + this.props.query + ')');
 	}
 	,componentWillReceiveProps: function(nextProps) {
-		console.log('In MyMatch.componentWillReceiveProps(' + nextProps.match + ')');
+		console.log('In MyMatch.componentWillReceiveProps(' + nextProps.query + ')');
 	}
 	,getRowClickHandler: function(datum) {
 		return () => {
@@ -23,7 +22,7 @@ var MyMatch = React.createClass({
 		};
 	}
 	,getColumns: function(datum) {
-		return [datum.Id, this.props.match, datum.firstName];
+		return [datum.Id, this.props.query, datum.firstName];
 	}
 	,render: function() {
 		var createRow = (datum) => <Row key={datum.Id} onRowClick={this.getRowClickHandler(datum)} columns={this.getColumns(datum)} />

@@ -54,11 +54,10 @@ var MyMatch = React.createClass({
 	displayName: 'MyMatch',
 
 	getInitialState: function getInitialState() {
-		console.log('In MyMatch.getInitialState(' + this.props.match + ')');
-		return { matchedItems: [] };
+		console.log('In MyMatch.getInitialState(' + this.props.query + ')');
 	},
 	componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-		console.log('In MyMatch.componentWillReceiveProps(' + nextProps.match + ')');
+		console.log('In MyMatch.componentWillReceiveProps(' + nextProps.query + ')');
 	},
 	getRowClickHandler: function getRowClickHandler(datum) {
 		var _this = this;
@@ -68,7 +67,7 @@ var MyMatch = React.createClass({
 		};
 	},
 	getColumns: function getColumns(datum) {
-		return [datum.Id, this.props.match, datum.firstName];
+		return [datum.Id, this.props.query, datum.firstName];
 	},
 	render: function render() {
 		var _this2 = this;
@@ -166,7 +165,7 @@ var TypeAhead = React.createClass({
 	render: function render() {
 		var datums = [{ "Id": 1, "firstName": "Wen" }, { "Id": 2, "firstName": "Elva" }, { "Id": 3, "firstName": "Winston" }, { "Id": 4, "firstName": "Evelyn" }];
 		var dropdownMenuStyle = this.state.dropDownVisible ? { display: 'block', zIndex: '1' } : { display: 'none', position: 'absolute', margin: '0', padding: '0' };
-		var dropdownContentElement = React.createElement(this.props.matchClass, { match: this.state.value, datums: datums, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler() });
+		var dropdownContentElement = React.createElement(this.props.matchClass, { query: this.state.value, datums: datums, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler() });
 		var dropdownMenuElement = React.createElement('div', { style: dropdownMenuStyle, className: "w3-card-2" }, dropdownContentElement);
 		return React.createElement('div', null, React.createElement('input', { className: "w3-input w3-border", type: "text", value: this.state.value, onChange: this.handleInputChange }), dropdownMenuElement);
 	}
