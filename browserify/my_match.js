@@ -2,7 +2,11 @@
 	module.exports = factory();
 })(this, function() {
 	var React = require('react');
-
+	/*
+	properties:
+		1. rowValues
+		2. onRowClick
+	*/
 	var Row = React.createClass({
 		render: function() {
 			var createCell = (cellValue, columnIndex) => <td key={columnIndex}>{cellValue}</td>;
@@ -11,7 +15,12 @@
 			);
 		}
 	});
-
+	/*
+	properties:
+		1. query
+		2. datums
+		3. dropdownItemSelectedHandler
+	*/
 	var MyMatch = React.createClass({
 		getInitialState: function() {
 			console.log('In MyMatch.getInitialState(' + this.props.query + ')');
@@ -22,7 +31,8 @@
 		}
 		,getRowClickHandler: function(datum) {
 			return () => {
-				this.props.dropdownItemSelectedHandler(datum.Id)
+				var rowSelectedHandler = this.props.dropdownItemSelectedHandler;
+				if (typeof rowSelectedHandler === 'function') rowSelectedHandler(datum.Id);
 			};
 		}
 		,getRowValues: function(datum) {

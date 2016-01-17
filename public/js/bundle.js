@@ -37,7 +37,11 @@ promise.done(function () {
 	module.exports = factory();
 })(undefined, function () {
 	var React = require('react');
-
+	/*
+ properties:
+ 	1. rowValues
+ 	2. onRowClick
+ */
 	var Row = React.createClass({
 		displayName: 'Row',
 
@@ -56,7 +60,12 @@ promise.done(function () {
 			);
 		}
 	});
-
+	/*
+ properties:
+ 	1. query
+ 	2. datums
+ 	3. dropdownItemSelectedHandler
+ */
 	var MyMatch = React.createClass({
 		displayName: 'MyMatch',
 
@@ -71,7 +80,8 @@ promise.done(function () {
 			var _this = this;
 
 			return function () {
-				_this.props.dropdownItemSelectedHandler(datum.Id);
+				var rowSelectedHandler = _this.props.dropdownItemSelectedHandler;
+				if (typeof rowSelectedHandler === 'function') rowSelectedHandler(datum.Id);
 			};
 		},
 		getRowValues: function getRowValues(datum) {
