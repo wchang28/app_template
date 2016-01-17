@@ -19,16 +19,17 @@ var TypeAhead = React.createClass({
 	,getDropdownItemSelectedHandler: function () {
 		var me = this;
 		return (function(value) {
-			console.log("selected: " + value);
+			alert("selected: " + value);
 		});
 	}
 	,handleInputChange: function (event) {
-		this.setInputText(event.target.value);
-		var bloodhoundEngine = this.props.bloodhoundEngine;
-		bloodhoundEngine.search(event.target.value, function(datums) {
+		var query = event.target.value;
+		this.setInputText(query);
+		var suggestionEngine = this.props.suggestionEngine;
+		suggestionEngine.search(query, function(datums) {
 			console.log(JSON.stringify(datums));
 		});
-		if (event.target.value.length >= 3) {
+		if (query.length >= 3) {
 			if (!this.state.dropDownVisible) this.showDropDown();
 		} else {
 			if (this.state.dropDownVisible) this.closeDropDown();

@@ -21,7 +21,7 @@ var promise = engine.initialize();
 
 promise.done(function () {
   console.log('ready to go!');
-  ReactDOM.render(React.createElement(TypeAhead, { matchClass: MyMatch, bloodhoundEngine: engine }), document.getElementById('test'));
+  ReactDOM.render(React.createElement(TypeAhead, { matchClass: MyMatch, suggestionEngine: engine }), document.getElementById('test'));
 }).fail(function () {
   console.log('err, something went wrong :(');
 });
@@ -61,19 +61,21 @@ var MyMatch = React.createClass({
 		console.log('In MyMatch.componentWillReceiveProps(' + nextProps.match + ')');
 	},
 	getRowClickHandler: function getRowClickHandler(datum) {
-		var me = this;
+		var _this = this;
+
 		return function () {
-			var value = datum.Id;
-			me.props.dropdownItemSelectedHandler(value);
+			_this.props.dropdownItemSelectedHandler(datum.Id);
 		};
 	},
 	getColumns: function getColumns(datum) {
 		return [datum.Id, this.props.match, datum.firstName];
 	},
 	render: function render() {
-		var me = this;
+		var _this2 = this;
+
+		//var me = this;
 		var createRow = function createRow(datum) {
-			return React.createElement(Row, { key: datum.Id, onRowClick: me.getRowClickHandler(datum), columns: me.getColumns(datum) });
+			return React.createElement(Row, { key: datum.Id, onRowClick: _this2.getRowClickHandler(datum), columns: _this2.getColumns(datum) });
 		};
 		return React.createElement(
 			'table',
@@ -140,16 +142,17 @@ var TypeAhead = React.createClass({
 	getDropdownItemSelectedHandler: function getDropdownItemSelectedHandler() {
 		var me = this;
 		return function (value) {
-			console.log("selected: " + value);
+			alert("selected: " + value);
 		};
 	},
 	handleInputChange: function handleInputChange(event) {
-		this.setInputText(event.target.value);
-		var bloodhoundEngine = this.props.bloodhoundEngine;
-		bloodhoundEngine.search(event.target.value, function (datums) {
+		var query = event.target.value;
+		this.setInputText(query);
+		var suggestionEngine = this.props.suggestionEngine;
+		suggestionEngine.search(query, function (datums) {
 			console.log(JSON.stringify(datums));
 		});
-		if (event.target.value.length >= 3) {
+		if (query.length >= 3) {
 			if (!this.state.dropDownVisible) this.showDropDown();
 		} else {
 			if (this.state.dropDownVisible) this.closeDropDown();

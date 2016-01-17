@@ -18,7 +18,7 @@ var promise = engine.initialize();
 
 promise.done(function() {
 	console.log('ready to go!');
-	ReactDOM.render(<TypeAhead matchClass={MyMatch} bloodhoundEngine={engine}/>, document.getElementById('test'));
+	ReactDOM.render(<TypeAhead matchClass={MyMatch} suggestionEngine={engine}/>, document.getElementById('test'));
 }).fail(function() {
 	console.log('err, something went wrong :('); 
 });

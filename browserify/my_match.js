@@ -20,20 +20,16 @@ var MyMatch = React.createClass({
 		console.log('In MyMatch.componentWillReceiveProps(' + nextProps.match + ')');
 	}
 	,getRowClickHandler: function(datum) {
-		var me = this;
-		return (function() {
-			var value = datum.Id;
-			me.props.dropdownItemSelectedHandler(value);
-		});
+		return () => {
+			this.props.dropdownItemSelectedHandler(datum.Id)
+		};
 	}
 	,getColumns: function(datum) {
 		return [datum.Id, this.props.match, datum.firstName];
 	}
 	,render: function() {
-		var me = this;
-		var createRow = function(datum) {
-			return <Row key={datum.Id} onRowClick={me.getRowClickHandler(datum)} columns={me.getColumns(datum)} />
-		};
+		//var me = this;
+		var createRow = (datum) => <Row key={datum.Id} onRowClick={this.getRowClickHandler(datum)} columns={this.getColumns(datum)} />
 		return (
 			<table className="w3-table w3-hoverable">
 				<thead>
