@@ -2,6 +2,12 @@
 	module.exports = factory();
 })(this, function() {
 	var React = require('react');
+	/*
+	properties:
+		1. dropDownContentClass
+		2. suggestionEngine
+		3. onQueryChanged
+	*/
 	var TypeAhead = React.createClass({
 		getInitialState: function() {
 			return {value: '', dropDownVisible: false};
@@ -50,7 +56,7 @@
 				,{"Id": 4, "firstName": "Evelyn"}
 			]
 			var dropdownMenuStyle = (this.state.dropDownVisible ? {display: 'block', zIndex:'1'} : {display:'none',position:'absolute',margin:'0',padding:'0'});
-			var dropdownContentElement = React.createElement(this.props.matchClass, {query: this.state.value, datums: datums, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler()});
+			var dropdownContentElement = React.createElement(this.props.dropDownContentClass, {query: this.state.value, datums: datums, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler()});
 			return (
 				<div>
 					<input className="w3-input w3-border" type="text" value={this.state.value} onChange={this.handleInputChange}/>

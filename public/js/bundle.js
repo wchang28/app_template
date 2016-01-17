@@ -25,7 +25,7 @@ var promise = engine.initialize();
 
 promise.done(function () {
 	console.log('ready to go!');
-	ReactDOM.render(React.createElement(TypeAhead, { matchClass: MyMatch, suggestionEngine: engine, onQueryChanged: onQueryChanged }), document.getElementById('test'));
+	ReactDOM.render(React.createElement(TypeAhead, { dropDownContentClass: MyMatch, suggestionEngine: engine, onQueryChanged: onQueryChanged }), document.getElementById('test'));
 }).fail(function () {
 	console.log('err, something went wrong :(');
 });
@@ -137,6 +137,12 @@ promise.done(function () {
 	module.exports = factory();
 })(undefined, function () {
 	var React = require('react');
+	/*
+ properties:
+ 	1. dropDownContentClass
+ 	2. suggestionEngine
+ 	3. onQueryChanged
+ */
 	var TypeAhead = React.createClass({
 		displayName: 'TypeAhead',
 
@@ -185,7 +191,7 @@ promise.done(function () {
 		render: function render() {
 			var datums = [{ "Id": 1, "firstName": "Wen" }, { "Id": 2, "firstName": "Elva" }, { "Id": 3, "firstName": "Winston" }, { "Id": 4, "firstName": "Evelyn" }];
 			var dropdownMenuStyle = this.state.dropDownVisible ? { display: 'block', zIndex: '1' } : { display: 'none', position: 'absolute', margin: '0', padding: '0' };
-			var dropdownContentElement = React.createElement(this.props.matchClass, { query: this.state.value, datums: datums, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler() });
+			var dropdownContentElement = React.createElement(this.props.dropDownContentClass, { query: this.state.value, datums: datums, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler() });
 			return React.createElement(
 				'div',
 				null,

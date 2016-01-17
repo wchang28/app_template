@@ -22,7 +22,7 @@ var promise = engine.initialize();
 
 promise.done(function() {
 	console.log('ready to go!');
-	ReactDOM.render(<TypeAhead matchClass={MyMatch} suggestionEngine={engine} onQueryChanged={onQueryChanged}/>, document.getElementById('test'));
+	ReactDOM.render(<TypeAhead dropDownContentClass={MyMatch} suggestionEngine={engine} onQueryChanged={onQueryChanged}/>, document.getElementById('test'));
 }).fail(function() {
 	console.log('err, something went wrong :('); 
 });
