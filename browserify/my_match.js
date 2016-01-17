@@ -2,9 +2,7 @@ var React = require('react');
 
 var Row = React.createClass({
 	render: function() {
-		var createColumn = function(column, i) {
-			return <td key={i}>{column}</td>
-		};
+		var createColumn = (column, i) => <td key={i}>{column}</td>;
 		return (
 			<tr onClick={this.props.onRowClick}>{this.props.columns.map(createColumn)}</tr>
 		);
@@ -28,7 +26,6 @@ var MyMatch = React.createClass({
 		return [datum.Id, this.props.match, datum.firstName];
 	}
 	,render: function() {
-		//var me = this;
 		var createRow = (datum) => <Row key={datum.Id} onRowClick={this.getRowClickHandler(datum)} columns={this.getColumns(datum)} />
 		return (
 			<table className="w3-table w3-hoverable">

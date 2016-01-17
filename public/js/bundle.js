@@ -73,7 +73,6 @@ var MyMatch = React.createClass({
 	render: function render() {
 		var _this2 = this;
 
-		//var me = this;
 		var createRow = function createRow(datum) {
 			return React.createElement(Row, { key: datum.Id, onRowClick: _this2.getRowClickHandler(datum), columns: _this2.getColumns(datum) });
 		};
