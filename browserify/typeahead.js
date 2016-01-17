@@ -29,6 +29,7 @@ var TypeAhead = React.createClass({
 		
 		var suggestionEngine = this.props.suggestionEngine;
 		suggestionEngine.search(query, function(datums) {
+			console.log('search result:');
 			console.log(JSON.stringify(datums));
 		});
 		if (query.length >= 3) {
