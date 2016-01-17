@@ -18,7 +18,8 @@ var TypeAhead = React.createClass({
 	}
 	,getDropdownItemSelectedHandler: function () {
 		return (value) => {
-			alert("selected: " + value);
+			//alert("selected: " + value);
+			this.setInputText(value);
 		};
 	}
 	,handleInputChange: function (event) {
