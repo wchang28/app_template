@@ -42,7 +42,7 @@
 				console.log(JSON.stringify(datums));
 				this.setState({datums: datums});
 			});
-			if (query.length >= 3) {
+			if (query.length >= 2) {
 				if (!this.state.dropDownVisible) this.showDropDown();
 			} else {
 				if (this.state.dropDownVisible) this.closeDropDown();

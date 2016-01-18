@@ -192,7 +192,7 @@ promise.done(function () {
 				console.log(JSON.stringify(datums));
 				_this2.setState({ datums: datums });
 			});
-			if (query.length >= 3) {
+			if (query.length >= 2) {
 				if (!this.state.dropDownVisible) this.showDropDown();
 			} else {
 				if (this.state.dropDownVisible) this.closeDropDown();
