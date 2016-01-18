@@ -37,7 +37,7 @@
 			var query = event.target.value;
 			this.setInputText(query);
 			var suggestionEngine = this.props.suggestionEngine;
-			suggestionEngine.search(query, function(datums) {
+			suggestionEngine.search(query, (datums) => {
 				console.log('search result:');
 				console.log(JSON.stringify(datums));
 				this.setState({datums: datums});

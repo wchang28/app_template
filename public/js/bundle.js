@@ -177,13 +177,15 @@ promise.done(function () {
 			};
 		},
 		handleInputChange: function handleInputChange(event) {
+			var _this2 = this;
+
 			var query = event.target.value;
 			this.setInputText(query);
 			var suggestionEngine = this.props.suggestionEngine;
 			suggestionEngine.search(query, function (datums) {
 				console.log('search result:');
 				console.log(JSON.stringify(datums));
-				this.setState({ datums: datums });
+				_this2.setState({ datums: datums });
 			});
 			if (query.length >= 3) {
 				if (!this.state.dropDownVisible) this.showDropDown();
