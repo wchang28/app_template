@@ -13,14 +13,14 @@ function onQueryChanged(query) {
 
 var datums =
 [
-	{"Id": "1", "lastNasme":"Chang", "firstName": "Wen"}
-	,{"Id": "2", "lastNasme":"Ku", "firstName": "Elva"}
-	,{"Id": "3", "lastNasme":"Chang", "firstName": "Winston"}
-	,{"Id": "4", "lastNasme":"Chang", "firstName": "Evelyn"}
-	,{"Id": "5", "lastNasme":"Chang", "firstName": "Juei"}
-	,{"Id": "6", "lastNasme":"Chang", "firstName": "Zoey"}
-	,{"Id": "7", "lastNasme":"Chang", "firstName": "Chung Hsia"}
-	,{"Id": "8", "lastNasme":"Lui", "firstName": "Ling Chu"}
+	{"Id": "1", "lastName":"Chang", "firstName": "Wen"}
+	,{"Id": "2", "lastName":"Ku", "firstName": "Elva"}
+	,{"Id": "3", "lastName":"Chang", "firstName": "Winston"}
+	,{"Id": "4", "lastName":"Chang", "firstName": "Evelyn"}
+	,{"Id": "5", "lastName":"Chang", "firstName": "Juei"}
+	,{"Id": "6", "lastName":"Chang", "firstName": "Zoey"}
+	,{"Id": "7", "lastName":"Chang", "firstName": "Chung Hsia"}
+	,{"Id": "8", "lastName":"Lui", "firstName": "Ling Chu"}
 ]
 			
 var engine = new Bloodhound({
