@@ -24,7 +24,7 @@ var engine = new Bloodhound({
 	},
 	queryTokenizer: Bloodhound.tokenizers.whitespace,
 	datumTokenizer: function datumTokenizer(datum) {
-		return [datum.Id, datum.lastNasme, datum.firstName];
+		return [datum.Id, datum.lastName, datum.firstName];
 	}
 });
 

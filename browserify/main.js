@@ -28,7 +28,7 @@ var engine = new Bloodhound({
 	local: datums,
 	identify: (obj) => obj.Id,
 	queryTokenizer: Bloodhound.tokenizers.whitespace,
-	datumTokenizer: (datum) => [datum.Id, datum.lastNasme, datum.firstName]
+	datumTokenizer: (datum) => [datum.Id, datum.lastName, datum.firstName]
 });
 
 var promise = engine.initialize();
