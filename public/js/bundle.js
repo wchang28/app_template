@@ -39,8 +39,8 @@ promise.done(function () {
 	var React = require('react');
 	/*
  properties:
- 	1. rowValues
- 	2. onRowClick
+ 	1. rowValues - array
+ 	2. onRowClick()
  */
 	var Row = React.createClass({
 		displayName: 'Row',
@@ -50,7 +50,7 @@ promise.done(function () {
 				return React.createElement(
 					'td',
 					{ key: columnIndex },
-					cellValue
+					cellValue ? cellValue : ''
 				);
 			};
 			return React.createElement(

@@ -4,12 +4,12 @@
 	var React = require('react');
 	/*
 	properties:
-		1. rowValues
-		2. onRowClick
+		1. rowValues - array
+		2. onRowClick()
 	*/
 	var Row = React.createClass({
 		render: function() {
-			var createCell = (cellValue, columnIndex) => <td key={columnIndex}>{cellValue}</td>;
+			var createCell = (cellValue, columnIndex) => <td key={columnIndex}>{cellValue ? cellValue: ''}</td>;
 			return (
 				<tr onClick={this.props.onRowClick}>{this.props.rowValues.map(createCell)}</tr>
 			);
