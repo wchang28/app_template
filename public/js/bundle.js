@@ -92,7 +92,7 @@ promise.done(function () {
 			};
 		},
 		getRowValues: function getRowValues(datum) {
-			return [datum.Id, this.props.query, datum.firstName];
+			return [datum.Id, datum.lastName, datum.firstName];
 		},
 		render: function render() {
 			var _this2 = this;
