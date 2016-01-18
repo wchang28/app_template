@@ -26,7 +26,7 @@ var datums =
 var engine = new Bloodhound({
 	initialize: false,
 	local: datums,
-	identify: (obj) => obj.Id,
+	identify: (obj) => obj.Id.toString(),
 	queryTokenizer: Bloodhound.tokenizers.whitespace,
 	datumTokenizer: (dataum) => [dataum.Id, dataum.lastNasme, dataum.firstName]
 });

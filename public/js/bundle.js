@@ -20,7 +20,7 @@ var engine = new Bloodhound({
 	initialize: false,
 	local: datums,
 	identify: function identify(obj) {
-		return obj.Id;
+		return obj.Id.toString();
 	},
 	queryTokenizer: Bloodhound.tokenizers.whitespace,
 	datumTokenizer: function datumTokenizer(dataum) {
