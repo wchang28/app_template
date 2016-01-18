@@ -14,9 +14,11 @@ function onQueryChanged(query) {
 	console.log('onQueryChanged(' + query + ')');
 }
 
+var datums = [{ "Id": 1, "lastNasme": "Chang", "firstName": "Wen" }, { "Id": 2, "lastNasme": "Ku", "firstName": "Elva" }, { "Id": 3, "lastNasme": "Chang", "firstName": "Winston" }, { "Id": 4, "lastNasme": "Chang", "firstName": "Evelyn" }, { "Id": 5, "lastNasme": "Chang", "firstName": "Juei" }, { "Id": 6, "lastNasme": "Chang", "firstName": "Zoey" }, { "Id": 7, "lastNasme": "Chang", "firstName": "Chung Hsia" }, { "Id": 8, "lastNasme": "Lui", "firstName": "Ling Chu" }];
+
 var engine = new Bloodhound({
 	initialize: false,
-	local: ['dog', 'pig', 'moose'],
+	local: datums,
 	queryTokenizer: Bloodhound.tokenizers.whitespace,
 	datumTokenizer: Bloodhound.tokenizers.whitespace
 });
@@ -64,7 +66,7 @@ promise.done(function () {
  properties:
  	1. query
  	2. datums
- 	3. dropdownItemSelectedHandler
+ 	3. dropdownItemSelectedHandler(value)
  */
 	var MyMatch = React.createClass({
 		displayName: 'MyMatch',
@@ -147,7 +149,7 @@ promise.done(function () {
 		displayName: 'TypeAhead',
 
 		getInitialState: function getInitialState() {
-			return { value: '', dropDownVisible: false };
+			return { value: '', dropDownVisible: false, datums: [] };
 		},
 		onDocumentClickHook: function onDocumentClickHook() {
 			this.closeDropDown();
@@ -181,6 +183,7 @@ promise.done(function () {
 			suggestionEngine.search(query, function (datums) {
 				console.log('search result:');
 				console.log(JSON.stringify(datums));
+				this.setState({ datums: datums });
 			});
 			if (query.length >= 3) {
 				if (!this.state.dropDownVisible) this.showDropDown();
@@ -189,9 +192,8 @@ promise.done(function () {
 			}
 		},
 		render: function render() {
-			var datums = [{ "Id": 1, "firstName": "Wen" }, { "Id": 2, "firstName": "Elva" }, { "Id": 3, "firstName": "Winston" }, { "Id": 4, "firstName": "Evelyn" }];
 			var dropdownMenuStyle = this.state.dropDownVisible ? { display: 'block', zIndex: '1' } : { display: 'none', position: 'absolute', margin: '0', padding: '0' };
-			var dropdownContentElement = React.createElement(this.props.dropDownContentClass, { query: this.state.value, datums: datums, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler() });
+			var dropdownContentElement = React.createElement(this.props.dropDownContentClass, { query: this.state.value, datums: this.state.datums, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler() });
 			return React.createElement(
 				'div',
 				null,

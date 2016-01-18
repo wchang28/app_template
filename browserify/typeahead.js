@@ -10,7 +10,7 @@
 	*/
 	var TypeAhead = React.createClass({
 		getInitialState: function() {
-			return {value: '', dropDownVisible: false};
+			return {value: '', dropDownVisible: false, datums:[]};
 		}
 		,onDocumentClickHook: function() {this.closeDropDown();}
 		,showDropDown: function() {
@@ -40,6 +40,7 @@
 			suggestionEngine.search(query, function(datums) {
 				console.log('search result:');
 				console.log(JSON.stringify(datums));
+				this.setState({datums: datums});
 			});
 			if (query.length >= 3) {
 				if (!this.state.dropDownVisible) this.showDropDown();
@@ -48,15 +49,8 @@
 			}
 		}
 		,render: function() {
-			var datums =
-			[
-				{"Id": 1, "firstName": "Wen"}
-				,{"Id": 2, "firstName": "Elva"}
-				,{"Id": 3, "firstName": "Winston"}
-				,{"Id": 4, "firstName": "Evelyn"}
-			]
 			var dropdownMenuStyle = (this.state.dropDownVisible ? {display: 'block', zIndex:'1'} : {display:'none',position:'absolute',margin:'0',padding:'0'});
-			var dropdownContentElement = React.createElement(this.props.dropDownContentClass, {query: this.state.value, datums: datums, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler()});
+			var dropdownContentElement = React.createElement(this.props.dropDownContentClass, {query: this.state.value, datums: this.state.datums, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler()});
 			return (
 				<div>
 					<input className="w3-input w3-border" type="text" value={this.state.value} onChange={this.handleInputChange}/>

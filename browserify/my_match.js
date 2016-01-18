@@ -19,7 +19,7 @@
 	properties:
 		1. query
 		2. datums
-		3. dropdownItemSelectedHandler
+		3. dropdownItemSelectedHandler(value)
 	*/
 	var MyMatch = React.createClass({
 		getInitialState: function() {
