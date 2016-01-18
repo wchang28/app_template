@@ -19,8 +19,13 @@ var datums = [{ "Id": 1, "lastNasme": "Chang", "firstName": "Wen" }, { "Id": 2, 
 var engine = new Bloodhound({
 	initialize: false,
 	local: datums,
+	identify: function identify(obj) {
+		return obj.Id;
+	},
 	queryTokenizer: Bloodhound.tokenizers.whitespace,
-	datumTokenizer: Bloodhound.tokenizers.whitespace
+	datumTokenizer: function datumTokenizer(dataum) {
+		return [dataum.Id, dataum.lastNasme, dataum.firstName];
+	}
 });
 
 var promise = engine.initialize();
