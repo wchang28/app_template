@@ -36,7 +36,7 @@
 			};
 		}
 		,getRowValues: function(datum) {
-			return [datum.Id, this.props.query, datum.firstName];
+			return [datum.Id, datum.lastName, datum.firstName];
 		}
 		,render: function() {
 			var createRow = (datum) => <Row key={datum.Id} onRowClick={this.getRowClickHandler(datum)} rowValues={this.getRowValues(datum)} />
