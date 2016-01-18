@@ -13,22 +13,22 @@ function onQueryChanged(query) {
 
 var datums =
 [
-	{"Id": 1, "lastNasme":"Chang", "firstName": "Wen"}
-	,{"Id": 2, "lastNasme":"Ku", "firstName": "Elva"}
-	,{"Id": 3, "lastNasme":"Chang", "firstName": "Winston"}
-	,{"Id": 4, "lastNasme":"Chang", "firstName": "Evelyn"}
-	,{"Id": 5, "lastNasme":"Chang", "firstName": "Juei"}
-	,{"Id": 6, "lastNasme":"Chang", "firstName": "Zoey"}
-	,{"Id": 7, "lastNasme":"Chang", "firstName": "Chung Hsia"}
-	,{"Id": 8, "lastNasme":"Lui", "firstName": "Ling Chu"}
+	{"Id": "1", "lastNasme":"Chang", "firstName": "Wen"}
+	,{"Id": "2", "lastNasme":"Ku", "firstName": "Elva"}
+	,{"Id": "3", "lastNasme":"Chang", "firstName": "Winston"}
+	,{"Id": "4", "lastNasme":"Chang", "firstName": "Evelyn"}
+	,{"Id": "5", "lastNasme":"Chang", "firstName": "Juei"}
+	,{"Id": "6", "lastNasme":"Chang", "firstName": "Zoey"}
+	,{"Id": "7", "lastNasme":"Chang", "firstName": "Chung Hsia"}
+	,{"Id": "8", "lastNasme":"Lui", "firstName": "Ling Chu"}
 ]
 			
 var engine = new Bloodhound({
 	initialize: false,
 	local: datums,
-	identify: (obj) => obj.Id.toString(),
+	identify: (obj) => obj.Id,
 	queryTokenizer: Bloodhound.tokenizers.whitespace,
-	datumTokenizer: (dataum) => [dataum.Id, dataum.lastNasme, dataum.firstName]
+	datumTokenizer: (datum) => [datum.Id, datum.lastNasme, datum.firstName]
 });
 
 var promise = engine.initialize();
