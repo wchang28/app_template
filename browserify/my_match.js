@@ -9,23 +9,20 @@
 		3. onRowClick()
 	*/
 	var Row = React.createClass({
-		wrap: function (t, bold) {
-			var style = (bold ? {fontWeight: 'bold'} : null);
-			return <span style={style}>{t}</span>;
-		}
 		chop: function(v, i) {
 			var
 				regexp = new RegExp(i, 'i'),
 				mark = v.search(regexp),
 				len = i.length;
+			var wrap = (t, bold) => <span style={bold?{fontWeight: 'bold'}:null}>{t}</span>
 			if (mark === -1) {
-				return [this.wrap(v)];
+				return [wrap(v)];
 			} else {
-				var ret = [];
-				if (mark > 0) ret.push(this.wrap(v.substr(0, mark), false));
-				ret.push(this.wrap(v.substr(mark, len), true));
-				if (mark + len < v.length) ret.push(this.chop(v.substr(mark + len), i));
-				return ret;
+				return [].concat(
+					wrap(v.substr(0, mark), false),
+					wrap(v.substr(mark, len), true),
+					this.chop(v.substr(mark + len), i)
+				);
 			}			
 		}
 		,render: function() {
