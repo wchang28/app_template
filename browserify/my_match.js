@@ -4,12 +4,32 @@
 	var React = require('react');
 	/*
 	properties:
-		1. rowValues - array
-		2. onRowClick()
+		1. query
+		2. rowValues - array
+		3. onRowClick()
 	*/
 	var Row = React.createClass({
-		render: function() {
-			var createCell = (cellValue, columnIndex) => <td key={columnIndex}>{cellValue ? cellValue: ''}</td>;
+		wrap: function (t, bold) {
+			var style = (bold ? {fontWeight: 'bold'} : null);
+			return <span style={style}>{t}</span>;
+		}
+		chop: function(v, i) {
+			var
+				regexp = new RegExp(i, 'i'),
+				mark = v.search(regexp),
+				len = i.length;
+			if (mark === -1) {
+				return [this.wrap(v)];
+			} else {
+				var ret = [];
+				if (mark > 0) ret.push(this.wrap(v.substr(0, mark), false));
+				ret.push(this.wrap(v.substr(mark, len), true));
+				if (mark + len < v.length) ret.push(this.chop(v.substr(mark + len), i));
+				return ret;
+			}			
+		}
+		,render: function() {
+			var createCell = (cellValue, columnIndex) => <td key={columnIndex}>{this.chop(cellValue, this.props.query)}</td>;
 			return (
 				<tr onClick={this.props.onRowClick}>{this.props.rowValues.map(createCell)}</tr>
 			);
@@ -39,7 +59,7 @@
 			return [datum.Id, datum.lastName, datum.firstName];
 		}
 		,render: function() {
-			var createRow = (datum) => <Row key={datum.Id} onRowClick={this.getRowClickHandler(datum)} rowValues={this.getRowValues(datum)} />
+			var createRow = (datum) => <Row key={datum.Id} query={this.props.query} onRowClick={this.getRowClickHandler(datum)} rowValues={this.getRowValues(datum)} />
 			return (
 				<table className="w3-table w3-hoverable">
 					<thead>
