@@ -17,7 +17,7 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "~2.1.4",
-    "font-awesome": "fontawesome#~4.5.0"
+    "font-awesome": "fontawesome#~4.5.0",
+	"w3-css": "git://github.com/wchang28/w3-css.git"
   }
 }

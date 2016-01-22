@@ -11,6 +11,8 @@ app.use(function(req, res, next) {
 	next();
 });
 app.use('/', express.static(path.join(__dirname, 'public')));
+app.use('/bower_components', express.static(path.join(__dirname, 'bower_components')));
+app.use('/api', require(path.join(__dirname, 'api')));
 
 app.get('/git_pull/:directory', function(req, res) {
 	res.send('directory=' + 'c:/run/scripts/' + req.params.directory);
