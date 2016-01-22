@@ -3,6 +3,13 @@ var ReactDOM = require('react-dom');
 var $ = require('jquery');
 var BloodhoundFactory = require('bloodhound');
 var Bloodhound = BloodhoundFactory($);
+require('eventsource-polyfill');
+
+var source = new EventSource("/api/event_stream");
+source.onmessage = function(event) {
+	var o = JSON.parse(event.data);
+	console.log('message: ' + JSON.stringify(o));
+};
 
 var MyMatch = require('./my_match');
 var TypeAhead = require('./typeahead');
@@ -20,7 +27,9 @@ var datums =
 	,{"Id": "5", "lastName":"Chang", "firstName": "Juei"}
 	,{"Id": "6", "lastName":"Chang", "firstName": "Zoey"}
 	,{"Id": "7", "lastName":"Chang", "firstName": "Chung Hsia"}
-	,{"Id": "8", "lastName":"Lui", "firstName": "Ling Chu"}
+	,{"Id": "8", "lastName":"Liu", "firstName": "Ling Chu"}
+	,{"Id": "9", "lastName":"Chen", "firstName": "Tiwei"}
+	,{"Id": "10", "lastName":"Sun", "firstName": "James"}
 ]
 			
 var engine = new Bloodhound({
