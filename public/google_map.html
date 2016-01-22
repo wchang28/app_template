@@ -15,7 +15,7 @@
       }
     </style>
     <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
-	<link rel="stylesheet" href="css/w3.css">
+	<link rel="stylesheet" href="/bower_components/w3-css/css/w3.css">
     <style>
       #locationField, #controls {
         position: relative;
@@ -56,89 +56,209 @@
         margin-bottom: 2px;
       }
     </style>
+	<script src="https://www.promisejs.org/polyfills/promise-done-7.0.4.min.js"></script>
+	<script src="js/underscore-min.js"></script>
   </head>
 
   <body>
     <div id="locationField">
-      <input id="autocomplete" placeholder="Enter your address"
-             onFocus="geolocate()" type="text" class="w3-input w3-border"></input>
+      <!-- <input id="autocomplete" placeholder="Enter your address" onFocus="geolocate()" type="text" class="w3-input w3-border"></input> -->
     </div>
 
-    <table id="address">
-      <tr>
-        <td class="label">Street address</td>
-        <td class="slimField"><input class="field" id="street_number"
-              disabled="true"></input></td>
-        <td class="wideField" colspan="2"><input class="field" id="route"
-              disabled="true"></input></td>
-      </tr>
-      <tr>
-        <td class="label">City</td>
-        <td class="wideField" colspan="3"><input class="field" id="locality"
-              disabled="true"></input></td>
-      </tr>
-      <tr>
-        <td class="label">State</td>
-        <td class="slimField"><input class="field"
-              id="administrative_area_level_1" disabled="true"></input></td>
-        <td class="label">Zip code</td>
-        <td class="wideField"><input class="field" id="postal_code"
-              disabled="true"></input></td>
-      </tr>
-      <tr>
-        <td class="label">Country</td>
-        <td class="wideField" colspan="3"><input class="field"
-              id="country" disabled="true"></input></td>
-      </tr>
-    </table>
-
-    <script>
+<script>
 // This example displays an address form, using the autocomplete feature
 // of the Google Places API to help users fill in the information.
 
-var placeSearch, autocomplete;
-var componentForm = {
-  street_number: 'short_name',
-  route: 'long_name',
-  locality: 'long_name',
-  administrative_area_level_1: 'short_name',
-  country: 'long_name',
-  postal_code: 'short_name'
-};
+//var __pacContainers = [];
+//var __detectingPacContainer = false;
+
+function SuggestionsWorker(instance_id) {
+	var me = this;
+	
+	// event simulation
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function simulate(element, eventName)
+	{
+		var options = extend(defaultOptions, arguments[2] || {});
+		var oEvent, eventType = null;
+
+		for (var name in eventMatchers)
+		{
+			if (eventMatchers[name].test(eventName)) { eventType = name; break; }
+		}
+
+		if (!eventType)
+			throw new SyntaxError('Only HTMLEvents and MouseEvents interfaces are supported');
+
+		if (document.createEvent)
+		{
+			oEvent = document.createEvent(eventType);
+			if (eventType == 'HTMLEvents')
+			{
+				oEvent.initEvent(eventName, options.bubbles, options.cancelable);
+			}
+			else
+			{
+				oEvent.initMouseEvent(eventName, options.bubbles, options.cancelable, document.defaultView,
+				options.button, options.pointerX, options.pointerY, options.pointerX, options.pointerY,
+				options.ctrlKey, options.altKey, options.shiftKey, options.metaKey, options.button, element);
+			}
+			element.dispatchEvent(oEvent);
+		}
+		else
+		{
+			options.clientX = options.pointerX;
+			options.clientY = options.pointerY;
+			var evt = document.createEventObject();
+			oEvent = extend(evt, options);
+			element.fireEvent('on' + eventName, oEvent);
+		}
+		return element;
+	}
+
+	function extend(destination, source) {
+		for (var property in source)
+		  destination[property] = source[property];
+		return destination;
+	}
+
+	var eventMatchers = {
+		'HTMLEvents': /^(?:load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll)$/,
+		'MouseEvents': /^(?:click|dblclick|mouse(?:down|up|over|move|out))$/
+	}
+	var defaultOptions = {
+		pointerX: 0,
+		pointerY: 0,
+		button: 0,
+		ctrlKey: false,
+		altKey: false,
+		shiftKey: false,
+		metaKey: false,
+		bubbles: true,
+		cancelable: true
+	}
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	function simulateFocus(element) {simulate(element, 'focus');}
+	
+	function copyArray(src) {
+		var ret = [];
+		for (var i = 0; i < src.length; i++)
+			ret.push(src[i]);
+		return ret;
+	}
+	function getAllPacContainers() {return copyArray(document.getElementsByClassName('pac-container'));}
+	
+	function createInputControl(instance_id) {
+		var container = document.getElementById('locationField');
+		var inputElement = document.createElement("input");
+		inputElement.type = "text";
+		inputElement.id = instance_id;
+		container.appendChild(inputElement); // put it into the DOM	
+		return inputElement;
+	}
+	
+	var __detectingPacContainer = true;
+	var __pacContainers = getAllPacContainers();
+	this.instance_id = instance_id;
+	this.inputControl = createInputControl(instance_id);
+	this.autocomplete = new google.maps.places.Autocomplete(this.inputControl, {types: ['geocode']});
+	
+	// TODO:
+	function getInnerAddress(element) {
+		return element.innerText;
+		//return element.innerHTML;
+	}
+	  	
+	function getPacContianerDOMSubtreeModifiedListener(onSuggestions) {
+		return (function(e) {
+			//console.log(pacContainer.innerHTML);
+			var items = me.pacContainer.getElementsByClassName('pac-item');
+			var suggestions = [];
+			for (var i = 0; i < items.length; i++)
+				suggestions.push(getInnerAddress(items[i]));
+			console.log('pacContainer DOMSubtreeModified(' + items.length + ')');
+			onSuggestions(suggestions);
+		});
+	}
+  
+	var docDOMSubtreeModifiedListener = function (e) {
+		//console.log(e.currentTarget.innerHTML); 
+		if (__detectingPacContainer) {
+			var ctrls = getAllPacContainers();
+			//console.log('I am here (' + ctrls.length + ','+ __pacContainers.length + ")");
+			if (ctrls.length === __pacContainers.length+1) {
+				var diff = _.difference(ctrls, __pacContainers);
+				//console.log('diff.length=' + diff.length);
+				var pacContainer = diff[0];
+				me.pacContainer = pacContainer;
+				document.body.removeEventListener(docDOMSubtreeModifiedListener);
+				pacContainer.addEventListener('DOMSubtreeModified', getPacContianerDOMSubtreeModifiedListener(function(suggestions) {
+					if (me.query) me.suggestions = suggestions;
+				}));
+				__pacContainers = ctrls;
+				__detectingPacContainer = false;
+				if (typeof me.onInitialized === 'function') me.onInitialized();
+			}
+		}
+	}
+	
+	document.body.addEventListener('DOMSubtreeModified', docDOMSubtreeModifiedListener);
+  
+	this.triggerQuery = function (queryString) {
+		me.inputControl.value = queryString;
+		simulateFocus(me.inputControl);
+	};
+	this.runQuery = function (query) {
+		me.query = query;
+		me.triggerQuery(query.queryString);
+		setTimeout(function() {
+			console.log('! timeout !');
+			if (me.query) {
+				var suggestions = (me.suggestions ? me.suggestions: []);
+				me.query.resolve(suggestions);	// resolve the query
+				me.query = null;
+				me.suggestions = null;
+			}
+		}, 250);
+	};
+	this.isRunningQuery = function() {return (me.query ? true : false);};
+}
 
 function initAutocomplete() {
-  // Create the autocomplete object, restricting the search to geographical
-  // location types.
-  autocomplete = new google.maps.places.Autocomplete(
-      /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
-      {types: ['geocode']});
-
-  // When the user selects an address from the dropdown, populate the address
-  // fields in the form.
-  autocomplete.addListener('place_changed', fillInAddress);
+	// Create the autocomplete object, restricting the search to geographical
+	// location types.
+  	var worker = new SuggestionsWorker('instance_1');
+	worker.onInitialized = function() {
+		console.log('worker initialized');
+	};
+  
+	setTimeout(function(){
+		console.log('triggering query');
+		var start = new Date().getTime();
+		var query = {
+			queryString: '9106 Whitney Ave'
+			,id: 'xxxyyyzzz'
+		};
+		var p = new Promise(function(resolve, reject) {
+			query.resolve = resolve;
+			setTimeout(function() {
+				reject('query timeout');
+			}, 500);
+		});
+		p.then(function(suggestions) {
+			console.log(JSON.stringify(suggestions));
+			console.log('query completed');
+			var end = new Date().getTime();
+			console.log('duration (ms):' +(end-start).toString());
+			//ack({suggestions: suggestions});
+		}).catch(function(err) {
+			//ack({suggestions: []});
+		});
+		worker.runQuery(query);
+	}, 3000);
 }
 
-// [START region_fillform]
-function fillInAddress() {
-  // Get the place details from the autocomplete object.
-  var place = autocomplete.getPlace();
-
-  for (var component in componentForm) {
-    document.getElementById(component).value = '';
-    document.getElementById(component).disabled = false;
-  }
-
-  // Get each component of the address from the place details
-  // and fill the corresponding field on the form.
-  for (var i = 0; i < place.address_components.length; i++) {
-    var addressType = place.address_components[i].types[0];
-    if (componentForm[addressType]) {
-      var val = place.address_components[i][componentForm[addressType]];
-      document.getElementById(addressType).value = val;
-    }
-  }
-}
-// [END region_fillform]
 
 // [START region_geolocation]
 // Bias the autocomplete object to the user's geographical location,
