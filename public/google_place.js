@@ -14,9 +14,11 @@ function SuggestionEngine () {
 			dispatchChange();
 		};
 		this.remove = function (queryId) {
+			var query = __outstanding[queryId];
 			delete __outstanding[queryId];
 			dispatchChange();
-		}
+			return query;
+		};
 		this.resolveQuery = function(queryId, suggestions) {
 			var query = __outstanding[queryId];
 			if (query) query.resolve(suggestions);			
@@ -66,10 +68,6 @@ function SuggestionEngine () {
 	}
 	var queue = new Queue();
 		
-	this.resolveQuery = function (queryId, suggestions) {
-		outstandingQueries.resolveQuery(queryId, suggestions);
-	};
-
 	function generateRandomId() {
 		// TODO:
 	}
@@ -168,16 +166,17 @@ function SuggestionEngine () {
 				ret.push(workerId);
 			return ret;
 		};
-		this.remove = function(workerId, listener) {
+		this.remove = function(workerId, eventListener) {
 			var worker = __workers[workerId];
 			if (worker) {
-				worker.eventSource.removeListener(listener);
+				worker.eventSource.removeListener(eventListener);
 				delete __workers[workerId];
 				count--;
 				dispatchWorkerRemoved(worker);
 				dispatchChange();
 				if (me.allReady()) dispatchAllWorkersReady();
 			}
+			return worker;
 		};
 		this.toJSON = function() {
 			var ret = {};
@@ -200,6 +199,14 @@ function SuggestionEngine () {
 		dispatchQueriesIfNecessary();
 	};
 	
+	this.createNewWorker = function(workerId, listener) {return workers.createNew(workerId, listener);};
+	this.removeWorker = function(workerId, listener) {return workers.remove(workerId, listener);};
+	this.setWorkerReady = function(workerId) {workers.setWorkerReady(workerId);};
+	this.workerResolveQuery = function (workerId, queryId, suggestions) {
+		workers.setWorkerNotBusy(workerId);
+		outstandingQueries.resolveQuery(queryId, suggestions);
+	};
+	
 	function randomlyChooseWorkers(workers, numToPick) {
 		var arr = [];
 		for (var i in workers)
@@ -212,7 +219,7 @@ function SuggestionEngine () {
 	}
 	
 	function dispatchQueryToWorker(worker, query) {
-		workers.setWorkerBusy(worker.workerId);
+		workers.setWorkerBusy(worker.id);
 		worker.eventSource.dispatchEvent({event:'QUERY', query: {queryString: query.queryString, id: query.id}});
 	}
 
@@ -249,29 +256,27 @@ function onSSEInitStreaming(req, rsp) {
 	// on first encountering a browser tab worker
 	var workerId = req.remoteAddress + ':' + req.remotePort;	// TODO:
 	var listener = function(event) {res.sendSse(event);}
-	var worker = suggestionEngine.getWorkers().createNew(workerId, listener);
+	var worker = suggestionEngine.createNewWorker(workerId, listener);
 	worker.eventSource.dispatchEvent({event:'WORKER_ID', id: workerId});	// let the browser tab worker knows about the id we assign to it
 	return {listener: listener, workerId: workerId};
 }
 
 function onSSEStreamingClose(req, res, o) {
-	suggestionEngine.getWorkers().remove(o.workerId, o.listener);
+	suggestionEngine.removeWorker(o.workerId, o.listener);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 // via web call from worker ... (GET)
 function onWorkerReady(req, res) {
-	//... 
 	var workerId = req.queries.workerId;
-	suggestionEngine.getWorkers().setWorkerReady(workerId);
+	suggestionEngine.setWorkerReady(workerId);
 	res.json({});
 }
 
 // via web call from worker ... (POST)
 function onQueryReturnedFromWorker(req, res) {
 	var q = req.body;
-	suggestionEngine.getWorkers().setWorkerNotBusy(q.workerId);
-	suggestionEngine.resolveQuery(q.id, q.suggestions);
+	suggestionEngine.workerResolveQuery(q.workerId, q.queryId, q.suggestions);
 	res.json({});
 }
 //****************************************************************************************************************
@@ -279,7 +284,7 @@ function onQueryReturnedFromWorker(req, res) {
 // via web call from query client...
 //****************************************************************************************************************
 function(req, res) {
-	var queryString = req.body;
+	var queryString = req.queries.queryString;
 	suggestionEngine.sumbitQuery(queryString, function(suggestions) {
 		res.json({suggestions: suggestions});
 	});
