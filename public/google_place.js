@@ -1,5 +1,6 @@
 var Promise = require('proimise');
-// TODO: EventSource
+var uuid = require('node-uuid');
+var EventEmitter = require('events');
 
 function SuggestionEngine () {
 	var __this = this;
@@ -68,12 +69,8 @@ function SuggestionEngine () {
 	}
 	var queue = new Queue();
 		
-	function generateRandomId() {
-		// TODO:
-	}
-	
 	this.sumbitQuery = function(queryString, onDone) {
-		var queryId = generateRandomId();
+		var queryId = uuid.v4();
 		var query = {
 			id: queryId
 			,queryString: queryString
@@ -111,11 +108,11 @@ function SuggestionEngine () {
 				id: workerId
 				,ready: false
 				,busy: false
-				,eventSource: new EventSource()
+				,eventSource: new EventEmitter()
 			};
 			__workers[workerId] = worker;
 			count++;
-			worker.eventSource.addListener(eventListener);
+			worker.eventSource.addListener('event', eventListener);
 			dispatchNewWorkerCreated(worker);
 			dispatchChange();
 			return worker;
@@ -169,7 +166,7 @@ function SuggestionEngine () {
 		this.remove = function(workerId, eventListener) {
 			var worker = __workers[workerId];
 			if (worker) {
-				worker.eventSource.removeListener(eventListener);
+				worker.eventSource.removeListener('event', eventListener);
 				delete __workers[workerId];
 				count--;
 				dispatchWorkerRemoved(worker);
@@ -199,7 +196,11 @@ function SuggestionEngine () {
 		dispatchQueriesIfNecessary();
 	};
 	
-	this.createNewWorker = function(workerId, listener) {return workers.createNew(workerId, listener);};
+	this.createNewWorker = function(workerId, listener) {
+		var worker = workers.createNew(workerId, listener);
+		worker.eventSource.emit('event', {event:'WORKER_ID', id: workerId});	// let the browser tab worker knows about the id we assign to
+		return worker;
+	};
 	this.removeWorker = function(workerId, listener) {return workers.remove(workerId, listener);};
 	this.setWorkerReady = function(workerId) {workers.setWorkerReady(workerId);};
 	this.workerResolveQuery = function (workerId, queryId, suggestions) {
@@ -220,7 +221,7 @@ function SuggestionEngine () {
 	
 	function dispatchQueryToWorker(worker, query) {
 		workers.setWorkerBusy(worker.id);
-		worker.eventSource.dispatchEvent({event:'QUERY', query: {queryString: query.queryString, id: query.id}});
+		worker.eventSource.emit('event', {event:'QUERY', query: {queryString: query.queryString, id: query.id}});
 	}
 
 	function dispatchQueriesIfNecessary() {
@@ -256,8 +257,7 @@ function onSSEInitStreaming(req, rsp) {
 	// on first encountering a browser tab worker
 	var workerId = req.remoteAddress + ':' + req.remotePort;	// TODO:
 	var listener = function(event) {res.sendSse(event);}
-	var worker = suggestionEngine.createNewWorker(workerId, listener);
-	worker.eventSource.dispatchEvent({event:'WORKER_ID', id: workerId});	// let the browser tab worker knows about the id we assign to it
+	suggestionEngine.createNewWorker(workerId, listener);
 	return {listener: listener, workerId: workerId};
 }
 
