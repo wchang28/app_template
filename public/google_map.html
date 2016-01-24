@@ -69,8 +69,127 @@
 // This example displays an address form, using the autocomplete feature
 // of the Google Places API to help users fill in the information.
 
-//var __pacContainers = [];
-//var __detectingPacContainer = false;
+var handlersGetter = (function() {
+	var __readyResolver = null;
+	var TIMEOUT_MS = 5000;
+	var TIMEOUT_MSG = 'worker readiness timeout';
+	function getOnWorkerIdReceivedHandler(OnDone) {
+		return (function (workerId) {
+			if (!__readyResolver) {	// receive workerId first
+				var p = new Promise(function(resolve, reject) {
+					__readyResolver = resolve;
+					setTimeout(function(){
+						reject(TIMEOUT_MSG);
+					},TIMEOUT_MS);
+				});
+				p.then(function() {	// receive from 2)
+					OnDone(null, workerId);
+				}).catch(function(err){
+					OnDone(err, null);
+				});
+			} else	// worker internal initialization completed first
+				__readyResolver(workerId);	// 1)
+		});
+	}
+	function getOnWorkerInternalInitializationCompleteHandler(OnDone) {
+		return (function () {
+			if (!__readyResolver) {	// worker internal initialization completed first
+				var p = new Promise(function(resolve, reject) {
+					__readyResolver = resolve;
+					setTimeout(function(){
+						reject(TIMEOUT_MSG);
+					},TIMEOUT_MS);
+				});
+				p.then(function(workerId) {	// receive from 1)
+					OnDone(null, workerId);	
+				}).catch(function(err){
+					OnDone(err, null);
+				});
+			} else	// receive workerId first
+				__readyResolver();	// 2)
+		});
+	}
+	return {
+		getOnWorkerIdReceivedHandler: getOnWorkerIdReceivedHandler
+		getOnWorkerInternalInitializationCompleteHandler: getOnWorkerInternalInitializationCompleteHandler
+	};
+})();
+
+var __workerId = null;
+
+function onWorkerReady(err, workerId) {
+	if (err)
+		alert('Error: ' + err.toString());
+	else {
+		__workerId = workerId;
+		// TODO: display workerId
+		console.log('worker is ready to receive query from the server :-)');
+		// TODO: inform the server the worker is ready by $.getJSON(/worker_api/worker_ready)
+	}
+}
+
+function returnQuery(query, suggestions) {
+	var q = {
+		workerId: __workerId
+		,queryId: query.id;
+		,suggestions: suggestions
+	};
+	// TODO: $.post(/worker_api/query_result) on q
+}
+
+var onWorkerIdReceived = handlersGetter.getOnWorkerIdReceivedHandler(onWorkerReady);
+var onWorkerInternalInitializationComplete = handlersGetter.getOnWorkerInternalInitializationCompleteHandler(onWorkerReady);
+
+var source = new EventSource("/worker_api/event_stream");
+source.onmessage = function(event) {
+	var o = JSON.parse(event.data);
+    if (o.event === 'WORKER_ID') {
+		console.log('worker received an id of ' + o.id + ' from the server');
+		onWorkerIdReceived(o.id);
+	}
+	else if (o.event === 'QUERY') {
+		var query = o.query;
+		var p = new Promise(function(resolve, reject) {
+			query.resolve = resolve;
+			setTimeout(function() {
+				reject('query timeout');
+			}, 500);
+		});
+		p.then(function(suggestions) {
+			console.log(JSON.stringify(suggestions));
+			console.log('query completed');
+			var end = new Date().getTime();
+			console.log('duration (ms):' +(end-start).toString());
+			returnQuery(query, suggestions);
+		}).catch(function(err) {
+			returnQuery(query, []);
+		});
+		worker.runQuery(query);
+	}
+};
+
+function getGeoLocateHandler(autocomplete) {
+// [START region_geolocation]
+// Bias the autocomplete object to the user's geographical location,
+// as supplied by the browser's 'navigator.geolocation' object.
+function geolocate() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var geolocation = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      var circle = new google.maps.Circle({
+        center: geolocation,
+        radius: position.coords.accuracy
+      });
+      autocomplete.setBounds(circle.getBounds());
+    });
+  }
+}
+// [END region_geolocation]
+return geolocate;
+}
 
 function SuggestionsWorker(instance_id) {
 	var me = this;
@@ -163,7 +282,8 @@ function SuggestionsWorker(instance_id) {
 	this.instance_id = instance_id;
 	this.inputControl = createInputControl(instance_id);
 	this.autocomplete = new google.maps.places.Autocomplete(this.inputControl, {types: ['geocode']});
-	
+	this.inputControl.onfocus = getGeoLocateHandler(this.autocomplete);
+
 	// TODO:
 	function getInnerAddress(element) {
 		return element.innerText;
@@ -225,14 +345,17 @@ function SuggestionsWorker(instance_id) {
 	this.isRunningQuery = function() {return (me.query ? true : false);};
 }
 
+var worker = new SuggestionsWorker('instance_1');
+
 function initAutocomplete() {
 	// Create the autocomplete object, restricting the search to geographical
 	// location types.
-  	var worker = new SuggestionsWorker('instance_1');
+  	worker = new SuggestionsWorker('instance_1');
 	worker.onInitialized = function() {
 		console.log('worker initialized');
+		onWorkerInternalInitializationComplete();
 	};
-  
+	/*
 	setTimeout(function(){
 		console.log('triggering query');
 		var start = new Date().getTime();
@@ -257,29 +380,8 @@ function initAutocomplete() {
 		});
 		worker.runQuery(query);
 	}, 3000);
+	*/
 }
-
-
-// [START region_geolocation]
-// Bias the autocomplete object to the user's geographical location,
-// as supplied by the browser's 'navigator.geolocation' object.
-function geolocate() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var geolocation = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
-      var circle = new google.maps.Circle({
-        center: geolocation,
-        radius: position.coords.accuracy
-      });
-      autocomplete.setBounds(circle.getBounds());
-    });
-  }
-}
-// [END region_geolocation]
-
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCD-BxQL5z696UwzqrFzRbYKgmDqrSsQtI&signed_in=true&libraries=places&callback=initAutocomplete"
         async defer></script>

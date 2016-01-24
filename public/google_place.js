@@ -248,45 +248,59 @@ function SuggestionEngine () {
 	workers.onChange = function() {dispatchChange(__this.getJSON());};
 }
 
-// worker web call handling
+// route /worker_api
 //****************************************************************************************************************
+var url = require('url');
+var express = require('express');
+var router = express.Router();
+var bodyParser = require('body-parser');
+var sse = require('sse-express');
 
-// sse handling (GET)
-////////////////////////////////////////////////////////////////////////////////////////////
-function onSSEInitStreaming(req, rsp) {
+router.use(bodyParser.json({'limit': '100mb'}));
+
+// sse messaging
+router.get('/event_stream', sse(function(req, rsp) {
 	// on first encountering a browser tab worker
-	var workerId = req.remoteAddress + ':' + req.remotePort;	// TODO:
-	var listener = function(event) {res.sendSse(event);}
-	suggestionEngine.createNewWorker(workerId, listener);
-	return {listener: listener, workerId: workerId};
-}
+	var workerId = req.connection.remoteAddress + ':' + req.connection.remotePort;
+	var listener = function(event) {res.sseSend(event);}
+	router.suggestionEngine.createNewWorker(workerId, listener);
+	return {listener: listener, workerId: workerId};	
+}, function(req, rsp, o) {
+	router.suggestionEngine.removeWorker(o.workerId, o.listener);
+}));
 
-function onSSEStreamingClose(req, res, o) {
-	suggestionEngine.removeWorker(o.workerId, o.listener);
-}
-////////////////////////////////////////////////////////////////////////////////////////////
-
-// via web call from worker ... (GET)
-function onWorkerReady(req, res) {
-	var workerId = req.queries.workerId;
-	suggestionEngine.setWorkerReady(workerId);
+router.get('/worker_ready', function(req, res) {
+	var url_parts = url.parse(req.url, true);
+	var workerId = url_parts.query.workerId;
+	router.suggestionEngine.setWorkerReady(workerId);
 	res.json({});
-}
+});
 
-// via web call from worker ... (POST)
-function onQueryReturnedFromWorker(req, res) {
+router.post('/query_result', function(req, res) {
 	var q = req.body;
-	suggestionEngine.workerResolveQuery(q.workerId, q.queryId, q.suggestions);
+	router.suggestionEngine.workerResolveQuery(q.workerId, q.queryId, q.suggestions);
 	res.json({});
-}
+});
+
+module.exports = router;
 //****************************************************************************************************************
 
-// via web call from query client...
+// route /client
 //****************************************************************************************************************
-function(req, res) {
-	var queryString = req.queries.queryString;
-	suggestionEngine.sumbitQuery(queryString, function(suggestions) {
+var url = require('url');
+var express = require('express');
+var router = express.Router();
+var bodyParser = require('body-parser');
+
+router.use(bodyParser.json({'limit': '100mb'}));
+
+router.get('/query', function(req, res)) {
+	var url_parts = url.parse(req.url, true);
+	var queryString = url_parts.query.queryString;
+	router.suggestionEngine.sumbitQuery(queryString, function(suggestions) {
 		res.json({suggestions: suggestions});
 	});
-}
+});
+
+module.exports = router;
 //****************************************************************************************************************
