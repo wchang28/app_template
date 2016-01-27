@@ -20,7 +20,7 @@ var MyMatch = require('./my_match');
 var TypeAhead = require('./typeahead');
 
 function onQueryChanged(query) {
-	console.log('onQueryChanged(' + query + ')');
+	//console.log('onQueryChanged(' + query + ')');
 }
 
 var datums = [{ "Id": "1", "lastName": "Chang", "firstName": "Wen" }, { "Id": "2", "lastName": "Ku", "firstName": "Elva" }, { "Id": "3", "lastName": "Chang", "firstName": "Winston" }, { "Id": "4", "lastName": "Chang", "firstName": "Evelyn" }, { "Id": "5", "lastName": "Chang", "firstName": "Juei" }, { "Id": "6", "lastName": "Chang", "firstName": "Zoey" }, { "Id": "7", "lastName": "Chang", "firstName": "Chung Hsia" }, { "Id": "8", "lastName": "Liu", "firstName": "Ling Chu" }, { "Id": "9", "lastName": "Chen", "firstName": "Tiwei" }, { "Id": "10", "lastName": "Sun", "firstName": "James" }];
@@ -105,13 +105,6 @@ promise.done(function () {
 	var MyMatch = React.createClass({
 		displayName: 'MyMatch',
 
-		getInitialState: function getInitialState() {
-			console.log('In MyMatch.getInitialState(' + this.props.query + ')');
-			return {};
-		},
-		componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-			//console.log('In MyMatch.componentWillReceiveProps(' + nextProps.query + ')');
-		},
 		getRowClickHandler: function getRowClickHandler(datum) {
 			var _this2 = this;
 

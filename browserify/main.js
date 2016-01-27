@@ -17,7 +17,7 @@ var MyMatch = require('./my_match');
 var TypeAhead = require('./typeahead');
 
 function onQueryChanged(query) {
-	console.log('onQueryChanged(' + query + ')');
+	//console.log('onQueryChanged(' + query + ')');
 }
 
 var datums =

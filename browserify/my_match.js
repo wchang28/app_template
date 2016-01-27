@@ -39,14 +39,7 @@
 		3. dropdownItemSelectedHandler(value)
 	*/
 	var MyMatch = React.createClass({
-		getInitialState: function() {
-			console.log('In MyMatch.getInitialState(' + this.props.query + ')');
-			return {};
-		}
-		,componentWillReceiveProps: function(nextProps) {
-			//console.log('In MyMatch.componentWillReceiveProps(' + nextProps.query + ')');
-		}
-		,getRowClickHandler: function(datum) {
+		getRowClickHandler: function(datum) {
 			return () => {
 				var rowSelectedHandler = this.props.dropdownItemSelectedHandler;
 				if (typeof rowSelectedHandler === 'function') rowSelectedHandler(datum.Id);
