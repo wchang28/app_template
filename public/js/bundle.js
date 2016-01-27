@@ -238,12 +238,16 @@ promise.done(function () {
 		doSearch: function doSearch(query) {
 			var _this2 = this;
 
-			var suggestionEngine = this.props.suggestionEngine;
-			suggestionEngine.search(query, function (datums) {
-				console.log('search result:');
-				console.log(JSON.stringify(datums));
-				_this2.setState({ datums: datums });
-			});
+			if (query === '') {
+				this.setState({ datums: [] });
+			} else {
+				var suggestionEngine = this.props.suggestionEngine;
+				suggestionEngine.search(query, function (datums) {
+					console.log('search result:');
+					console.log(JSON.stringify(datums));
+					_this2.setState({ datums: datums });
+				});
+			}
 		},
 		changeBuffer: new BufferChanges(),
 		componentDidMount: function componentDidMount() {
@@ -254,7 +258,6 @@ promise.done(function () {
 			this.changeBuffer.on('change', function (query) {
 				_this3.doSearch(query);
 			});
-			//this.changeBuffer.on('change', (query) => {console.log('change event fired. query=' + query);});
 		},
 		componentWillUnmount: function componentWillUnmount() {
 			this.changeBuffer.done();

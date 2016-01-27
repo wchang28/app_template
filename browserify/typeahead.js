@@ -66,19 +66,22 @@
 			};
 		}
 		,doSearch: function(query) {
-			var suggestionEngine = this.props.suggestionEngine;
-			suggestionEngine.search(query, (datums) => {
-				console.log('search result:');
-				console.log(JSON.stringify(datums));
-				this.setState({datums: datums});
-			});			
+			if (query === '') {
+				this.setState({datums: []});
+			} else {
+				var suggestionEngine = this.props.suggestionEngine;
+				suggestionEngine.search(query, (datums) => {
+					console.log('search result:');
+					console.log(JSON.stringify(datums));
+					this.setState({datums: datums});
+				});
+			}			
 		}
 		,changeBuffer: new BufferChanges()
 		,componentDidMount: function() {
 			console.log('componentDidMount()');
 			this.changeBuffer.init();
 			this.changeBuffer.on('change', (query) => {this.doSearch(query);});
-			//this.changeBuffer.on('change', (query) => {console.log('change event fired. query=' + query);});
 		}
 		,componentWillUnmount: function() {
 			this.changeBuffer.done();
