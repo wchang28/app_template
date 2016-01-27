@@ -63,9 +63,6 @@ promise.done(function () {
 		displayName: 'Row',
 
 		chop: function chop(v, i) {
-			var regexp = new RegExp(i, 'i'),
-			    mark = v.search(regexp),
-			    len = i.length;
 			var wrap = function wrap(t, bold) {
 				return React.createElement(
 					'span',
@@ -73,6 +70,10 @@ promise.done(function () {
 					t
 				);
 			};
+			if (v === '') return [wrap(v)];
+			var regexp = new RegExp(i, 'i'),
+			    mark = v.search(regexp),
+			    len = i.length;
 			if (mark === -1) {
 				return [wrap(v)];
 			} else {

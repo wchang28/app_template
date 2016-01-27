@@ -10,11 +10,12 @@
 	*/
 	var Row = React.createClass({
 		chop: function(v, i) {
+			var wrap = (t, bold) => <span style={bold?{fontWeight: 'bold'}:null}>{t}</span>
+			if (v === '') return [wrap(v)];
 			var
 				regexp = new RegExp(i, 'i'),
 				mark = v.search(regexp),
 				len = i.length;
-			var wrap = (t, bold) => <span style={bold?{fontWeight: 'bold'}:null}>{t}</span>
 			if (mark === -1) {
 				return [wrap(v)];
 			} else {
