@@ -88,7 +88,6 @@
 		,handleInputChange: function (event) {
 			var query = event.target.value;
 			this.setInputText(query);
-			//this.state.datums = [];
 			this.setState({datums: []});
 			this.changeBuffer.setValue(query);
 			//this.doSearch(query);
