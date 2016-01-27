@@ -67,6 +67,7 @@
 		}
 		,doSearch: function(query) {
 			if (query === '') {
+				console.log('I am here');
 				this.setState({datums: []});
 			} else {
 				var suggestionEngine = this.props.suggestionEngine;
