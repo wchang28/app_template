@@ -67,6 +67,7 @@
 			};
 		}
 		,doSearch: function(query) {
+			/*
 			if (query.length >= 2) {
 				var suggestionEngine = this.props.suggestionEngine;
 				suggestionEngine.search(query, (datums) => {
@@ -75,6 +76,7 @@
 					this.setState({datums: datums});
 				});
 			}
+			*/
 		}
 		,changeBuffer: new BufferChanges()
 		,componentDidMount: function() {

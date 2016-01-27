@@ -238,25 +238,25 @@ promise.done(function () {
 			};
 		},
 		doSearch: function doSearch(query) {
-			var _this2 = this;
-
-			if (query.length >= 2) {
-				var suggestionEngine = this.props.suggestionEngine;
-				suggestionEngine.search(query, function (datums) {
-					console.log('search result:');
-					console.log(JSON.stringify(datums));
-					_this2.setState({ datums: datums });
-				});
-			}
+			/*
+   if (query.length >= 2) {
+   	var suggestionEngine = this.props.suggestionEngine;
+   	suggestionEngine.search(query, (datums) => {
+   		console.log('search result:');
+   		console.log(JSON.stringify(datums));
+   		this.setState({datums: datums});
+   	});
+   }
+   */
 		},
 		changeBuffer: new BufferChanges(),
 		componentDidMount: function componentDidMount() {
-			var _this3 = this;
+			var _this2 = this;
 
 			console.log('componentDidMount()');
 			this.changeBuffer.init();
 			this.changeBuffer.on('change', function (query) {
-				_this3.doSearch(query);
+				_this2.doSearch(query);
 			});
 		},
 		componentWillUnmount: function componentWillUnmount() {
