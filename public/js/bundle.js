@@ -110,7 +110,7 @@ promise.done(function () {
 			return {};
 		},
 		componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-			console.log('In MyMatch.componentWillReceiveProps(' + nextProps.query + ')');
+			//console.log('In MyMatch.componentWillReceiveProps(' + nextProps.query + ')');
 		},
 		getRowClickHandler: function getRowClickHandler(datum) {
 			var _this2 = this;

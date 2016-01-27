@@ -44,7 +44,7 @@
 			return {};
 		}
 		,componentWillReceiveProps: function(nextProps) {
-			console.log('In MyMatch.componentWillReceiveProps(' + nextProps.query + ')');
+			//console.log('In MyMatch.componentWillReceiveProps(' + nextProps.query + ')');
 		}
 		,getRowClickHandler: function(datum) {
 			return () => {
