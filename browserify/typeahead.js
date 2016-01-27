@@ -67,7 +67,7 @@
 		}
 		,doSearch: function(query) {
 			var suggestionEngine = this.props.suggestionEngine;
-			suggestionEngine.search(value, (datums) => {
+			suggestionEngine.search(query, (datums) => {
 				console.log('search result:');
 				console.log(JSON.stringify(datums));
 				this.setState({datums: datums});

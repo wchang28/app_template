@@ -239,7 +239,7 @@ promise.done(function () {
 			var _this2 = this;
 
 			var suggestionEngine = this.props.suggestionEngine;
-			suggestionEngine.search(value, function (datums) {
+			suggestionEngine.search(query, function (datums) {
 				console.log('search result:');
 				console.log(JSON.stringify(datums));
 				_this2.setState({ datums: datums });
