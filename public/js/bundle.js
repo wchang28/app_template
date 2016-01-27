@@ -244,26 +244,25 @@ promise.done(function () {
 		},
 		changeBuffer: new BufferChanges(),
 		componentDidMount: function componentDidMount() {
+			var _this2 = this;
+
 			this.changeBuffer.init();
 			this.changeBuffer.on('change', function (value) {
-				console.log('change event fire: value=' + value);
+				var suggestionEngine = _this2.props.suggestionEngine;
+				suggestionEngine.search(value, function (datums) {
+					console.log('search result:');
+					console.log(JSON.stringify(datums));
+					_this2.setState({ datums: datums });
+				});
 			});
 		},
 		componentWillUnmount: function componentWillUnmount() {
 			this.changeBuffer.done();
 		},
 		handleInputChange: function handleInputChange(event) {
-			var _this2 = this;
-
 			var query = event.target.value;
 			this.setInputText(query);
 			this.changeBuffer.setValue(query);
-			var suggestionEngine = this.props.suggestionEngine;
-			suggestionEngine.search(query, function (datums) {
-				console.log('search result:');
-				console.log(JSON.stringify(datums));
-				_this2.setState({ datums: datums });
-			});
 			if (query.length >= 2) {
 				if (!this.state.dropDownVisible) this.showDropDown();
 			} else {

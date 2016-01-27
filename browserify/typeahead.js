@@ -69,7 +69,12 @@
 		,componentDidMount: function() {
 			this.changeBuffer.init();
 			this.changeBuffer.on('change', (value) => {
-				console.log('change event fire: value=' + value);
+				var suggestionEngine = this.props.suggestionEngine;
+				suggestionEngine.search(value, (datums) => {
+					console.log('search result:');
+					console.log(JSON.stringify(datums));
+					this.setState({datums: datums});
+				});
 			});
 		}
 		,componentWillUnmount: function() {
@@ -79,12 +84,6 @@
 			var query = event.target.value;
 			this.setInputText(query);
 			this.changeBuffer.setValue(query);
-			var suggestionEngine = this.props.suggestionEngine;
-			suggestionEngine.search(query, (datums) => {
-				console.log('search result:');
-				console.log(JSON.stringify(datums));
-				this.setState({datums: datums});
-			});
 			if (query.length >= 2) {
 				if (!this.state.dropDownVisible) this.showDropDown();
 			} else {
