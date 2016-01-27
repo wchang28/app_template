@@ -49,7 +49,7 @@
 			return [datum.Id, datum.lastName, datum.firstName];
 		}
 		,render: function() {
-			var createRow = (datum, i) => <Row key={i.toString()} query={this.props.query} onRowClick={this.getRowClickHandler(datum)} rowValues={this.getRowValues(datum)} />
+			var createRow = (datum, i) => <Row key={i} query={this.props.query} onRowClick={this.getRowClickHandler(datum)} rowValues={this.getRowValues(datum)} />
 			return (
 				<table className="w3-table w3-hoverable">
 					<thead>
