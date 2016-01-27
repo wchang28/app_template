@@ -65,18 +65,19 @@
 				this.setInputText(selectedValue);
 			};
 		}
+		,doSearch: function(query) {
+			var suggestionEngine = this.props.suggestionEngine;
+			suggestionEngine.search(value, (datums) => {
+				console.log('search result:');
+				console.log(JSON.stringify(datums));
+				this.setState({datums: datums});
+			});			
+		}
 		,changeBuffer: new BufferChanges()
 		,componentDidMount: function() {
 			console.log('componentDidMount()');
 			this.changeBuffer.init();
-			this.changeBuffer.on('change', (value) => {
-				var suggestionEngine = this.props.suggestionEngine;
-				suggestionEngine.search(value, (datums) => {
-					console.log('search result:');
-					console.log(JSON.stringify(datums));
-					this.setState({datums: datums});
-				});
-			});
+			//this.changeBuffer.on('change', doSearch);
 		}
 		,componentWillUnmount: function() {
 			this.changeBuffer.done();
@@ -85,6 +86,7 @@
 			var query = event.target.value;
 			this.setInputText(query);
 			this.changeBuffer.setValue(query);
+			doSearch(query);
 			if (query.length >= 2) {
 				if (!this.state.dropDownVisible) this.showDropDown();
 			} else {

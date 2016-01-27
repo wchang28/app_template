@@ -235,20 +235,21 @@ promise.done(function () {
 				_this.setInputText(selectedValue);
 			};
 		},
-		changeBuffer: new BufferChanges(),
-		componentDidMount: function componentDidMount() {
+		doSearch: function doSearch(query) {
 			var _this2 = this;
 
+			var suggestionEngine = this.props.suggestionEngine;
+			suggestionEngine.search(value, function (datums) {
+				console.log('search result:');
+				console.log(JSON.stringify(datums));
+				_this2.setState({ datums: datums });
+			});
+		},
+		changeBuffer: new BufferChanges(),
+		componentDidMount: function componentDidMount() {
 			console.log('componentDidMount()');
 			this.changeBuffer.init();
-			this.changeBuffer.on('change', function (value) {
-				var suggestionEngine = _this2.props.suggestionEngine;
-				suggestionEngine.search(value, function (datums) {
-					console.log('search result:');
-					console.log(JSON.stringify(datums));
-					_this2.setState({ datums: datums });
-				});
-			});
+			//this.changeBuffer.on('change', doSearch);
 		},
 		componentWillUnmount: function componentWillUnmount() {
 			this.changeBuffer.done();
@@ -257,6 +258,7 @@ promise.done(function () {
 			var query = event.target.value;
 			this.setInputText(query);
 			this.changeBuffer.setValue(query);
+			doSearch(query);
 			if (query.length >= 2) {
 				if (!this.state.dropDownVisible) this.showDropDown();
 			} else {
