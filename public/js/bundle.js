@@ -240,12 +240,14 @@ promise.done(function () {
 		doSearch: function doSearch(query) {
 			var _this2 = this;
 
-			var suggestionEngine = this.props.suggestionEngine;
-			suggestionEngine.search(query, function (datums) {
-				console.log('search result:');
-				console.log(JSON.stringify(datums));
-				_this2.setState({ datums: datums });
-			});
+			if (query.length >= 2) {
+				var suggestionEngine = this.props.suggestionEngine;
+				suggestionEngine.search(query, function (datums) {
+					console.log('search result:');
+					console.log(JSON.stringify(datums));
+					_this2.setState({ datums: datums });
+				});
+			}
 		},
 		changeBuffer: new BufferChanges(),
 		componentDidMount: function componentDidMount() {

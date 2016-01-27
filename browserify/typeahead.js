@@ -67,12 +67,14 @@
 			};
 		}
 		,doSearch: function(query) {
-			var suggestionEngine = this.props.suggestionEngine;
-			suggestionEngine.search(query, (datums) => {
-				console.log('search result:');
-				console.log(JSON.stringify(datums));
-				this.setState({datums: datums});
-			});
+			if (query.length >= 2) {
+				var suggestionEngine = this.props.suggestionEngine;
+				suggestionEngine.search(query, (datums) => {
+					console.log('search result:');
+					console.log(JSON.stringify(datums));
+					this.setState({datums: datums});
+				});
+			}
 		}
 		,changeBuffer: new BufferChanges()
 		,componentDidMount: function() {
