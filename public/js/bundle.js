@@ -119,8 +119,8 @@ promise.done(function () {
 		render: function render() {
 			var _this3 = this;
 
-			var createRow = function createRow(datum) {
-				return React.createElement(Row, { key: datum.Id, query: _this3.props.query, onRowClick: _this3.getRowClickHandler(datum), rowValues: _this3.getRowValues(datum) });
+			var createRow = function createRow(datum, i) {
+				return React.createElement(Row, { key: i, query: _this3.props.query, onRowClick: _this3.getRowClickHandler(datum), rowValues: _this3.getRowValues(datum) });
 			};
 			return React.createElement(
 				'table',
