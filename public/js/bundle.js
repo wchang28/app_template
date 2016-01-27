@@ -250,6 +250,9 @@ promise.done(function () {
 			console.log('componentDidMount()');
 			this.changeBuffer.init();
 			//this.changeBuffer.on('change', (query) => {this.doSearch(query);});
+			this.changeBuffer.on('change', function (query) {
+				console.log('change event fired. query=' + query);
+			});
 		},
 		componentWillUnmount: function componentWillUnmount() {
 			this.changeBuffer.done();
@@ -258,7 +261,7 @@ promise.done(function () {
 			var query = event.target.value;
 			this.setInputText(query);
 			this.changeBuffer.setValue(query);
-			this.doSearch(query);
+			//this.doSearch(query);
 			if (query.length >= 2) {
 				if (!this.state.dropDownVisible) this.showDropDown();
 			} else {
