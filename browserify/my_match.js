@@ -5,11 +5,15 @@
 	/*
 	properties:
 		1. query
-		2. rowValues - array
+		2. suggestion
+		3. selected
 		3. onRowClick()
 	*/
 	var Row = React.createClass({
-		chop: function(v, keyword, index) {
+		getInitialState: function() {
+			return {mouseInside: false};
+		}	
+		,chop: function(v, keyword, index) {
 			var wrap = (t, index, bold) => <span key={index} style={bold?{fontWeight: 'bold'}:null}>{t}</span>
 			if (v === '') return [wrap(v, index)];
 			var	regexp = new RegExp(keyword, 'i');
@@ -25,34 +29,45 @@
 				);
 			}			
 		}
+		,onMouseEnter: function() {
+			this.setState({mouseInside: true});
+		}
+		,onMouseLeave: function() {
+			this.setState({mouseInside: false});
+		}
+		,createRowColumns: function () {
+			var suggestion = this.props.suggestion;
+			var rowValues = [suggestion.Id, suggestion.lastName, suggestion.firstName];
+			var createCell = (cellValue, columnIndex) => <td key={columnIndex}>{this.chop(cellValue.toString(), this.props.query, 0)}</td>;
+			//var createCell = (cellValue, columnIndex) => <td key={columnIndex}>{cellValue.toString()}</td>;
+			return rowValues.map(createCell);
+		}
 		,render: function() {
-			var createCell = (cellValue, columnIndex) => <td key={columnIndex}>{this.chop(cellValue, this.props.query, 0)}</td>;
-			//var createCell = (cellValue, columnIndex) => <td key={columnIndex}>{cellValue}</td>;
+			var rowStyle = (this.props.selected || this.state.mouseInside ? {backgroundColor:'#f1f1f1'} : null);
 			return (
-				<tr onClick={this.props.onRowClick}>{this.props.rowValues.map(createCell)}</tr>
+				<tr style={rowStyle} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onClick={this.props.onRowClick}>{this.createRowColumns()}</tr>
 			);
 		}
 	});
+	
 	/*
 	properties:
 		1. query
 		2. datums
-		3. dropdownItemSelectedHandler(value)
+		3. selectedIndex
+		4. dropdownItemSelectedHandler(value)
 	*/
-	var MyMatch = React.createClass({
-		getRowClickHandler: function(datum) {
+	var MatchContent = React.createClass({
+		getRowClickHandler: function(suggestion) {
 			return () => {
 				var rowSelectedHandler = this.props.dropdownItemSelectedHandler;
-				if (typeof rowSelectedHandler === 'function') rowSelectedHandler(datum.Id);
+				if (typeof rowSelectedHandler === 'function') rowSelectedHandler(suggestion);
 			};
 		}
-		,getRowValues: function(datum) {
-			return [datum.Id, datum.lastName, datum.firstName];
-		}
 		,render: function() {
-			var createRow = (datum, i) => <Row key={i} query={this.props.query} onRowClick={this.getRowClickHandler(datum)} rowValues={this.getRowValues(datum)} />
+		var createRow = (suggestion, i) => <Row key={i} index={i} selected={this.props.selectedIndex==parseInt(i)} query={this.props.query} onRowClick={this.getRowClickHandler(suggestion)} suggestion={suggestion} />
 			return (
-				<table className="w3-table w3-hoverable">
+				<table className="w3-table">
 					<thead>
 						<tr className="w3-light-grey">
 							<th>Id</th>
@@ -65,5 +80,5 @@
 			);
 		}
 	});
-	return MyMatch;
+	return MatchContent;
 });

@@ -17,7 +17,7 @@ var MyMatch = require('./my_match');
 var TypeAhead = require('./typeahead');
 
 function onQueryChanged(query) {
-	//console.log('onQueryChanged(' + query + ')');
+	console.log('onQueryChanged(' + query + ')');
 }
 
 var datums =
@@ -46,7 +46,7 @@ var promise = engine.initialize();
 
 promise.done(function() {
 	console.log('ready to go!');
-	ReactDOM.render(<TypeAhead dropDownContentClass={MyMatch} suggestionEngine={engine} onQueryChanged={onQueryChanged}/>, document.getElementById('test'));
+	ReactDOM.render(<TypeAhead dropDownContentClass={MyMatch} identity={(o) => o.Id} suggestionEngine={engine} onQueryChanged={onQueryChanged}/>, document.getElementById('test'));
 }).fail(function() {
 	console.log('err, something went wrong :('); 
 });

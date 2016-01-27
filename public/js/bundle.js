@@ -8,12 +8,16 @@
 	/*
  properties:
  	1. query
- 	2. datum - string
+ 	2. suggestion - string
+ 	3. selected
  	3. onRowClick()
  */
 	var Row = React.createClass({
 		displayName: 'Row',
 
+		getInitialState: function getInitialState() {
+			return { mouseInside: false };
+		},
 		chop: function chop(v, keyword, index) {
 			var wrap = function wrap(t, index, bold) {
 				return React.createElement(
@@ -32,15 +36,33 @@
 				return [].concat(wrap(v.substr(0, mark), index, false), wrap(v.substr(mark, len), index + 1, true), this.chop(v.substr(mark + len), keyword, index + 2));
 			}
 		},
+		onMouseEnter: function onMouseEnter() {
+			this.setState({ mouseInside: true });
+		},
+		onMouseLeave: function onMouseLeave() {
+			this.setState({ mouseInside: false });
+		},
+		createRowColumns: function createRowColumns() {
+			var _this = this;
+
+			var suggestion = this.props.suggestion;
+			var rowValues = [suggestion];
+			var createCell = function createCell(cellValue, columnIndex) {
+				return React.createElement(
+					'td',
+					{ key: columnIndex },
+					_this.chop(cellValue.toString(), _this.props.query, 0)
+				);
+			};
+			//var createCell = (cellValue, columnIndex) => <td key={columnIndex}>{cellValue.toString()}</td>;
+			return rowValues.map(createCell);
+		},
 		render: function render() {
+			var rowStyle = this.props.selected || this.state.mouseInside ? { backgroundColor: '#f1f1f1' } : null;
 			return React.createElement(
 				'tr',
-				{ onClick: this.props.onRowClick },
-				React.createElement(
-					'td',
-					null,
-					this.chop(this.props.suggestion, this.props.query, 0)
-				)
+				{ style: rowStyle, onMouseEnter: this.onMouseEnter, onMouseLeave: this.onMouseLeave, onClick: this.props.onRowClick },
+				this.createRowColumns()
 			);
 		}
 	});
@@ -48,28 +70,29 @@
  properties:
  	1. query
  	2. datums
- 	3. dropdownItemSelectedHandler(value)
+ 	3. selectedIndex
+ 	4. dropdownItemSelectedHandler(value)
  */
-	var AddressMatch = React.createClass({
-		displayName: 'AddressMatch',
+	var MatchContent = React.createClass({
+		displayName: 'MatchContent',
 
 		getRowClickHandler: function getRowClickHandler(suggestion) {
-			var _this = this;
+			var _this2 = this;
 
 			return function () {
-				var rowSelectedHandler = _this.props.dropdownItemSelectedHandler;
+				var rowSelectedHandler = _this2.props.dropdownItemSelectedHandler;
 				if (typeof rowSelectedHandler === 'function') rowSelectedHandler(suggestion);
 			};
 		},
 		render: function render() {
-			var _this2 = this;
+			var _this3 = this;
 
 			var createRow = function createRow(suggestion, i) {
-				return React.createElement(Row, { key: i, query: _this2.props.query, onRowClick: _this2.getRowClickHandler(suggestion), suggestion: suggestion });
+				return React.createElement(Row, { key: i, index: i, selected: _this3.props.selectedIndex == parseInt(i), query: _this3.props.query, onRowClick: _this3.getRowClickHandler(suggestion), suggestion: suggestion });
 			};
 			return React.createElement(
 				'table',
-				{ className: 'w3-table w3-hoverable' },
+				{ className: 'w3-table' },
 				React.createElement(
 					'tbody',
 					null,
@@ -78,7 +101,7 @@
 			);
 		}
 	});
-	return AddressMatch;
+	return MatchContent;
 });
 
 },{"react":167}],2:[function(require,module,exports){
@@ -115,7 +138,9 @@ function onQueryChanged(query) {
 
 var engine = new GoogleSearchSuggestion();
 
-ReactDOM.render(React.createElement(TypeAhead, { dropDownContentClass: AddressMatch, suggestionEngine: engine, onQueryChanged: onQueryChanged }), document.getElementById('test'));
+ReactDOM.render(React.createElement(TypeAhead, { dropDownContentClass: AddressMatch, identity: function identity(o) {
+		return o;
+	}, suggestionEngine: engine, onQueryChanged: onQueryChanged }), document.getElementById('test'));
 
 },{"./addressMatch":1,"./googleSearchSuggestion":2,"./typeahead":4,"react":167,"react-dom":11}],4:[function(require,module,exports){
 'use strict';
@@ -167,7 +192,7 @@ ReactDOM.render(React.createElement(TypeAhead, { dropDownContentClass: AddressMa
 		displayName: 'TypeAhead',
 
 		getInitialState: function getInitialState() {
-			return { value: '', dropDownVisible: false, datums: [] };
+			return { value: '', dropDownVisible: false, datums: [], selectedIndex: -1 };
 		},
 		onDocumentClickHook: function onDocumentClickHook() {
 			this.closeDropDown();
@@ -190,8 +215,8 @@ ReactDOM.render(React.createElement(TypeAhead, { dropDownContentClass: AddressMa
 		getDropdownItemSelectedHandler: function getDropdownItemSelectedHandler() {
 			var _this = this;
 
-			return function (selectedValue) {
-				_this.setInputText(selectedValue);
+			return function (datum) {
+				_this.setInputText(_this.props.identity(datum));
 			};
 		},
 		doSearch: function doSearch(query) {
@@ -222,7 +247,7 @@ ReactDOM.render(React.createElement(TypeAhead, { dropDownContentClass: AddressMa
 		handleInputChange: function handleInputChange(event) {
 			var query = event.target.value;
 			this.setInputText(query);
-			this.setState({ datums: [] });
+			this.setState({ datums: [], selectedIndex: -1 });
 			this.changeBuffer.setValue(query);
 			//this.doSearch(query);
 			if (query.length >= 2) {
@@ -231,13 +256,38 @@ ReactDOM.render(React.createElement(TypeAhead, { dropDownContentClass: AddressMa
 				if (this.state.dropDownVisible) this.closeDropDown();
 			}
 		},
+		onInputKeyDown: function onInputKeyDown(e) {
+			if (e.keyCode == 38) {
+				// up arrow key
+				if (this.state.datums.length == 0) this.setState({ selectedIndex: -1 });else {
+					var selectedIndex = this.state.selectedIndex;
+					if (selectedIndex == -1 || selectedIndex == 0) selectedIndex = this.state.datums.length - 1;else selectedIndex--;
+					this.setState({ selectedIndex: selectedIndex });
+				}
+				e.preventDefault();
+			} else if (e.keyCode == 40) {
+				// down arrow key
+				if (this.state.datums.length == 0) this.setState({ selectedIndex: -1 });else {
+					var selectedIndex = this.state.selectedIndex;
+					if (selectedIndex == -1 || selectedIndex == this.state.datums.length - 1) selectedIndex = 0;else selectedIndex++;
+					this.setState({ selectedIndex: selectedIndex });
+				}
+				e.preventDefault();
+			} else if (e.keyCode == 13) {
+				// enter key
+				if (this.state.dropDownVisible) this.closeDropDown();
+				var selectedIndex = this.state.selectedIndex;
+				if (selectedIndex >= 0 && selectedIndex < this.state.datums.length) this.setInputText(this.props.identity(this.state.datums[selectedIndex]));
+				e.preventDefault();
+			}
+		},
 		render: function render() {
 			var dropdownMenuStyle = this.state.dropDownVisible ? { display: 'block', zIndex: '1' } : { display: 'none', position: 'absolute', margin: '0', padding: '0' };
-			var dropdownContentElement = React.createElement(this.props.dropDownContentClass, { query: this.state.value, datums: this.state.datums, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler() });
+			var dropdownContentElement = React.createElement(this.props.dropDownContentClass, { query: this.state.value, datums: this.state.datums, selectedIndex: this.state.selectedIndex, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler() });
 			return React.createElement(
 				'div',
 				null,
-				React.createElement('input', { className: 'w3-input w3-border', type: 'text', value: this.state.value, onChange: this.handleInputChange }),
+				React.createElement('input', { className: 'w3-input w3-border', type: 'text', value: this.state.value, onChange: this.handleInputChange, onKeyDown: this.onInputKeyDown }),
 				React.createElement(
 					'div',
 					{ style: dropdownMenuStyle, className: 'w3-card-2' },
