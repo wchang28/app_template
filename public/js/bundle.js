@@ -8,11 +8,13 @@ var BloodhoundFactory = require('bloodhound');
 var Bloodhound = BloodhoundFactory($);
 require('eventsource-polyfill');
 
+/*
 var source = new EventSource("/api/event_stream");
-source.onmessage = function (event) {
+source.onmessage = function(event) {
 	var o = JSON.parse(event.data);
 	console.log('message: ' + JSON.stringify(o));
 };
+*/
 
 var MyMatch = require('./my_match');
 var TypeAhead = require('./typeahead');
