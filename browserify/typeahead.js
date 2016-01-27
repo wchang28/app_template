@@ -77,8 +77,8 @@
 		,componentDidMount: function() {
 			console.log('componentDidMount()');
 			this.changeBuffer.init();
-			//this.changeBuffer.on('change', (query) => {this.doSearch(query);});
-			this.changeBuffer.on('change', (query) => {console.log('change event fired. query=' + query);});
+			this.changeBuffer.on('change', (query) => {this.doSearch(query);});
+			//this.changeBuffer.on('change', (query) => {console.log('change event fired. query=' + query);});
 		}
 		,componentWillUnmount: function() {
 			this.changeBuffer.done();

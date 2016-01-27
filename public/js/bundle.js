@@ -247,12 +247,14 @@ promise.done(function () {
 		},
 		changeBuffer: new BufferChanges(),
 		componentDidMount: function componentDidMount() {
+			var _this3 = this;
+
 			console.log('componentDidMount()');
 			this.changeBuffer.init();
-			//this.changeBuffer.on('change', (query) => {this.doSearch(query);});
 			this.changeBuffer.on('change', function (query) {
-				console.log('change event fired. query=' + query);
+				_this3.doSearch(query);
 			});
+			//this.changeBuffer.on('change', (query) => {console.log('change event fired. query=' + query);});
 		},
 		componentWillUnmount: function componentWillUnmount() {
 			this.changeBuffer.done();
