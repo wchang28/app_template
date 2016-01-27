@@ -12,13 +12,14 @@
 		var lastValue = null;
 		var currentValue = null;
 		var interval = null;
+		function callBack() {
+			if (lastValue != currentValue) {
+				lastValue = currentValue;
+				me.emit('change', currentValue);
+			}				
+		}
 		this.init = function() {
-			interval = setInterval(function() {
-				if (lastValue != currentValue) {
-					lastValue = currentValue;
-					me.emit('change', currentValue);
-				}				
-			},500);
+			interval = setInterval(callBack,500);
 		};
 		this.done = function() {
 			if (interval) clearInterval(interval);
@@ -66,17 +67,12 @@
 			};
 		}
 		,doSearch: function(query) {
-			if (query === '') {
-				console.log('I am here');
-				this.setState({datums: []});
-			} else {
-				var suggestionEngine = this.props.suggestionEngine;
-				suggestionEngine.search(query, (datums) => {
-					console.log('search result:');
-					console.log(JSON.stringify(datums));
-					this.setState({datums: datums});
-				});
-			}			
+			var suggestionEngine = this.props.suggestionEngine;
+			suggestionEngine.search(query, (datums) => {
+				console.log('search result:');
+				console.log(JSON.stringify(datums));
+				this.setState({datums: datums});
+			});
 		}
 		,changeBuffer: new BufferChanges()
 		,componentDidMount: function() {
