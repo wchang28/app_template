@@ -34,7 +34,7 @@
 	}
 	var util = require('util');
 	util.inherits(BufferChanges, EventEmitter);
-	
+
 	/*
 	properties:
 		1. dropDownContentClass
@@ -67,16 +67,14 @@
 			};
 		}
 		,doSearch: function(query) {
-			/*
 			if (query.length >= 2) {
 				var suggestionEngine = this.props.suggestionEngine;
 				suggestionEngine.search(query, (datums) => {
-					console.log('search result:');
+					console.log('query='+query+',search result:');
 					console.log(JSON.stringify(datums));
 					this.setState({datums: datums});
 				});
 			}
-			*/
 		}
 		,changeBuffer: new BufferChanges()
 		,componentDidMount: function() {
@@ -90,6 +88,8 @@
 		,handleInputChange: function (event) {
 			var query = event.target.value;
 			this.setInputText(query);
+			//this.state.datums = [];
+			this.setState({datums: []});
 			this.changeBuffer.setValue(query);
 			//this.doSearch(query);
 			if (query.length >= 2) {

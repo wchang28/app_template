@@ -9,25 +9,25 @@
 		3. onRowClick()
 	*/
 	var Row = React.createClass({
-		chop: function(v, i) {
-			var wrap = (t, bold) => <span style={bold?{fontWeight: 'bold'}:null}>{t}</span>
-			if (v === '') return [wrap(v)];
-			var
-				regexp = new RegExp(i, 'i'),
-				mark = v.search(regexp),
-				len = i.length;
+		chop: function(v, keyword, index) {
+			var wrap = (t, index, bold) => <span key={index} style={bold?{fontWeight: 'bold'}:null}>{t}</span>
+			if (v === '') return [wrap(v, index)];
+			var	regexp = new RegExp(keyword, 'i');
+			var mark = v.search(regexp);
+			var len = keyword.length;
 			if (mark === -1) {
-				return [wrap(v)];
+				return [wrap(v, index)];
 			} else {
 				return [].concat(
-					wrap(v.substr(0, mark), false),
-					wrap(v.substr(mark, len), true),
-					this.chop(v.substr(mark + len), i)
+					wrap(v.substr(0, mark), index, false),
+					wrap(v.substr(mark, len), index+1, true),
+					this.chop(v.substr(mark + len), keyword, index+2)
 				);
 			}			
 		}
 		,render: function() {
-			var createCell = (cellValue, columnIndex) => <td key={columnIndex}>{this.chop(cellValue, this.props.query)}</td>;
+			var createCell = (cellValue, columnIndex) => <td key={columnIndex}>{this.chop(cellValue, this.props.query, 0)}</td>;
+			//var createCell = (cellValue, columnIndex) => <td key={columnIndex}>{cellValue}</td>;
 			return (
 				<tr onClick={this.props.onRowClick}>{this.props.rowValues.map(createCell)}</tr>
 			);
