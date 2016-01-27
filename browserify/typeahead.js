@@ -2,6 +2,38 @@
 	module.exports = factory();
 })(this, function() {
 	var React = require('react');
+	
+	var events = require('events');
+	var EventEmitter = (events.EventEmitter ? events.EventEmitter : events);
+	
+	function BufferChanges() {
+		EventEmitter.call(this);
+		var me = this;
+		var lastValue = null;
+		var currentValue = null;
+		var interval = null;
+		this.init = function() {
+			interval = setInterval(function() {
+				if (lastValue != currentValue) {
+					lastValue = currentValue;
+					me.emit('change', currentValue);
+				}				
+			},500);
+		};
+		this.done = function() {
+			if (interval) clearInterval(interval);
+		};
+		this.setValue = function(value) {
+			currentValue = value;
+			if (lastValue === null) {
+				lastValue = currentValue;
+				this.emit('change', currentValue);
+			}
+		};
+	}
+	var util = require('util');
+	util.inherits(BufferChanges, EventEmitter);
+	
 	/*
 	properties:
 		1. dropDownContentClass
@@ -33,9 +65,20 @@
 				this.setInputText(selectedValue);
 			};
 		}
+		,changeBuffer: new BufferChanges()
+		,componentDidMount: function() {
+			this.changeBuffer.init();
+			this.changeBuffer.on('change', (value) => {
+				console.log('change event fire: value=' + value);
+			});
+		}
+		,componentWillUnmount: function() {
+			this.changeBuffer.done();
+		}
 		,handleInputChange: function (event) {
 			var query = event.target.value;
 			this.setInputText(query);
+			changeBuffer.setValue(query);
 			var suggestionEngine = this.props.suggestionEngine;
 			suggestionEngine.search(query, (datums) => {
 				console.log('search result:');
