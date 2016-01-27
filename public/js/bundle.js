@@ -257,7 +257,7 @@ promise.done(function () {
 
 			var query = event.target.value;
 			this.setInputText(query);
-			changeBuffer.setValue(query);
+			this.changeBuffer.setValue(query);
 			var suggestionEngine = this.props.suggestionEngine;
 			suggestionEngine.search(query, function (datums) {
 				console.log('search result:');

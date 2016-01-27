@@ -78,7 +78,7 @@
 		,handleInputChange: function (event) {
 			var query = event.target.value;
 			this.setInputText(query);
-			changeBuffer.setValue(query);
+			this.changeBuffer.setValue(query);
 			var suggestionEngine = this.props.suggestionEngine;
 			suggestionEngine.search(query, (datums) => {
 				console.log('search result:');
