@@ -67,6 +67,7 @@
 		}
 		,changeBuffer: new BufferChanges()
 		,componentDidMount: function() {
+			console.log('componentDidMount()');
 			this.changeBuffer.init();
 			this.changeBuffer.on('change', (value) => {
 				var suggestionEngine = this.props.suggestionEngine;

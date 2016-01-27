@@ -246,6 +246,7 @@ promise.done(function () {
 		componentDidMount: function componentDidMount() {
 			var _this2 = this;
 
+			console.log('componentDidMount()');
 			this.changeBuffer.init();
 			this.changeBuffer.on('change', function (value) {
 				var suggestionEngine = _this2.props.suggestionEngine;
