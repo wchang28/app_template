@@ -22,6 +22,7 @@
     "eventsource-polyfill": "^0.9.6",
     "express": "^4.13.3",
     "jquery": "^2.2.0",
+	"jquery-no-dom": "git+https://github.com/wchang28/jquery-no-dom.git",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "sse-express": "git+https://github.com/wchang28/sse-express.git"
