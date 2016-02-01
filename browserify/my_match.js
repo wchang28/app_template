@@ -4,10 +4,11 @@
 	var React = require('react');
 	/*
 	properties:
-		1. query
-		2. suggestion
-		3. selected
-		3. onRowClick()
+		1. query - string
+		2. suggestion - datum
+		3. selected -true/false
+		4. suggestionSelectedHandler(suggestion)
+		5. index - row index
 	*/
 	var Row = React.createClass({
 		getInitialState: function() {

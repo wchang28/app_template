@@ -39,8 +39,11 @@
 	properties:
 		1. dropDownContentClass
 		2. suggestionEngine
-		3. onQueryChanged
+		3. onQueryChanged: (value, suggestionSelected) => {}
 		4. minCharToSearch
+		5. identity: (datum) => string
+		6. placeholder
+		7. roundSize (small,medium,large,xxlarge,jumbo)
 	*/
 	var TypeAhead = React.createClass({
 		getInitialState: function() {
@@ -58,16 +61,16 @@
 			this.setState({dropDownVisible: false});
 			document.removeEventListener('click', this.onDocumentClickHook);
 		}
-		,setInputText: function(value) {
+		,setInputText: function(value, suggestionSelected) {
 			this.setState({value: value});
-			this.notifyQueryChanged(value);
+			this.notifyQueryChanged(value, suggestionSelected);
 		}
-		,notifyQueryChanged: function(value) {
-			if (typeof this.props.onQueryChanged === 'function') this.props.onQueryChanged(value);
+		,notifyQueryChanged: function(value, suggestionSelected) {
+			if (typeof this.props.onQueryChanged === 'function') this.props.onQueryChanged(value, suggestionSelected);
 		}
 		,getSuggestionSelectedHandler: function () {
 			return (datum) => {
-				this.setInputText(this.props.identity(datum));
+				this.setInputText(this.props.identity(datum), true);
 			};
 		}
 		,doSearch: function(query) {
@@ -91,7 +94,7 @@
 		}
 		,handleInputChange: function (event) {
 			var query = event.target.value;
-			this.setInputText(query);
+			this.setInputText(query, false);
 			this.setState({datums: [], selectedIndex: -1});
 			this.changeBuffer.setValue(query);
 			//this.doSearch(query);
@@ -112,6 +115,7 @@
 					else
 						selectedIndex--;
 					this.setState({selectedIndex: selectedIndex});
+					if (selectedIndex>=0 && selectedIndex<this.state.datums.length)	this.setInputText(this.props.identity(this.state.datums[selectedIndex]), false);
 				}
 				e.preventDefault();
 			}
@@ -125,23 +129,31 @@
 					else
 						selectedIndex++;
 					this.setState({selectedIndex: selectedIndex});
+					if (selectedIndex>=0 && selectedIndex<this.state.datums.length)	this.setInputText(this.props.identity(this.state.datums[selectedIndex]), false);
 				}
 				e.preventDefault();
 			}
 			else if (e.keyCode == 13) { // enter key
 				if (this.state.dropDownVisible) this.closeDropDown();
 				var selectedIndex = this.state.selectedIndex;
-				if (selectedIndex>=0 && selectedIndex<this.state.datums.length)	this.setInputText(this.props.identity(this.state.datums[selectedIndex]));
+				if (selectedIndex>=0 && selectedIndex<this.state.datums.length)	this.setInputText(this.props.identity(this.state.datums[selectedIndex]), true);
 				e.preventDefault();
 			}
 		}
 		,render: function() {
+			var roundSize = (this.props.roundSize ? this.props.roundSize : '');
+			var classInput = "w3-input w3-border";
+			var classSuggestionMenu = "w3-card-2";
+			if (roundSize !== '') { 
+				classInput += " w3-round-" + roundSize;
+				classSuggestionMenu += " w3-round-" + roundSize;
+			}
 			var dropdownMenuStyle = (this.state.dropDownVisible ? {display: 'block', zIndex:'1'} : {display:'none',position:'absolute',margin:'0',padding:'0'});
 			var dropdownContentElement = React.createElement(this.props.dropDownContentClass, {query: this.state.value, datums: this.state.datums, selectedIndex: this.state.selectedIndex, suggestionSelectedHandler: this.getSuggestionSelectedHandler()});
 			return (
 				<div>
-					<input className="w3-input w3-border" type="text" value={this.state.value} onChange={this.handleInputChange} onKeyDown={this.onInputKeyDown}/>
-					<div style={dropdownMenuStyle} className="w3-card-2">
+					<input className={classInput} type="text" placeholder={this.props.placeholder} value={this.state.value} onChange={this.handleInputChange} onKeyDown={this.onInputKeyDown}/>
+					<div style={dropdownMenuStyle} className={classSuggestionMenu}>
 						{dropdownContentElement}
 					</div>
 				</div>
