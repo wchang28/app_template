@@ -65,7 +65,7 @@
 		,notifyQueryChanged: function(value) {
 			if (typeof this.props.onQueryChanged === 'function') this.props.onQueryChanged(value);
 		}
-		,getDropdownItemSelectedHandler: function () {
+		,getSuggestionSelectedHandler: function () {
 			return (datum) => {
 				this.setInputText(this.props.identity(datum));
 			};
@@ -137,7 +137,7 @@
 		}
 		,render: function() {
 			var dropdownMenuStyle = (this.state.dropDownVisible ? {display: 'block', zIndex:'1'} : {display:'none',position:'absolute',margin:'0',padding:'0'});
-			var dropdownContentElement = React.createElement(this.props.dropDownContentClass, {query: this.state.value, datums: this.state.datums, selectedIndex: this.state.selectedIndex, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler()});
+			var dropdownContentElement = React.createElement(this.props.dropDownContentClass, {query: this.state.value, datums: this.state.datums, selectedIndex: this.state.selectedIndex, suggestionSelectedHandler: this.getSuggestionSelectedHandler()});
 			return (
 				<div>
 					<input className="w3-input w3-border" type="text" value={this.state.value} onChange={this.handleInputChange} onKeyDown={this.onInputKeyDown}/>

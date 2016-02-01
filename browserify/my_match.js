@@ -45,7 +45,7 @@
 		,render: function() {
 			var rowStyle = (this.props.selected || this.state.mouseInside ? {backgroundColor:'#f1f1f1'} : null);
 			return (
-				<tr style={rowStyle} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onClick={this.props.onRowClick}>{this.createRowColumns()}</tr>
+				<tr style={rowStyle} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onClick={(e) => {this.porps.suggestionSelectedHandler(this.props.suggestion);}}>{this.createRowColumns()}</tr>
 			);
 		}
 	});
@@ -55,17 +55,11 @@
 		1. query
 		2. datums
 		3. selectedIndex
-		4. dropdownItemSelectedHandler(value)
+		4. suggestionSelectedHandler(value)
 	*/
 	var MatchContent = React.createClass({
-		getRowClickHandler: function(suggestion) {
-			return () => {
-				var rowSelectedHandler = this.props.dropdownItemSelectedHandler;
-				if (typeof rowSelectedHandler === 'function') rowSelectedHandler(suggestion);
-			};
-		}
-		,render: function() {
-		var createRow = (suggestion, i) => <Row key={i} index={i} selected={this.props.selectedIndex==parseInt(i)} query={this.props.query} onRowClick={this.getRowClickHandler(suggestion)} suggestion={suggestion} />
+		render: function() {
+		var createRow = (suggestion, i) => <Row key={i} index={i} selected={this.props.selectedIndex==parseInt(i)} query={this.props.query} suggestionSelectedHandler={this.props.suggestionSelectedHandler} suggestion={suggestion} />
 			return (
 				<table className="w3-table">
 					<thead>
