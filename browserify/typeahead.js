@@ -82,7 +82,7 @@
 		}
 		,changeBuffer: new BufferChanges()
 		,componentDidMount: function() {
-			console.log('componentDidMount()');
+			//console.log('componentDidMount()');
 			this.changeBuffer.init();
 			this.changeBuffer.on('change', (query) => {this.doSearch(query);});
 		}

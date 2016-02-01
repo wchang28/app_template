@@ -239,7 +239,7 @@ ReactDOM.render(React.createElement(TypeAhead, { dropDownContentClass: AddressMa
 		componentDidMount: function componentDidMount() {
 			var _this3 = this;
 
-			console.log('componentDidMount()');
+			//console.log('componentDidMount()');
 			this.changeBuffer.init();
 			this.changeBuffer.on('change', function (query) {
 				_this3.doSearch(query);
