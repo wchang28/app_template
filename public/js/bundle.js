@@ -58,10 +58,14 @@
 			return rowValues.map(createCell);
 		},
 		render: function render() {
+			var _this2 = this;
+
 			var rowStyle = this.props.selected || this.state.mouseInside ? { backgroundColor: '#f1f1f1' } : null;
 			return React.createElement(
 				'tr',
-				{ style: rowStyle, onMouseEnter: this.onMouseEnter, onMouseLeave: this.onMouseLeave, onClick: this.props.onRowClick },
+				{ style: rowStyle, onMouseEnter: this.onMouseEnter, onMouseLeave: this.onMouseLeave, onClick: function onClick(e) {
+						_this2.porps.suggestionSelectedHandler(_this2.props.suggestion);
+					} },
 				this.createRowColumns()
 			);
 		}
@@ -71,24 +75,16 @@
  	1. query
  	2. datums
  	3. selectedIndex
- 	4. dropdownItemSelectedHandler(value)
+ 	4. suggestionSelectedHandler(value)
  */
 	var MatchContent = React.createClass({
 		displayName: 'MatchContent',
 
-		getRowClickHandler: function getRowClickHandler(suggestion) {
-			var _this2 = this;
-
-			return function () {
-				var rowSelectedHandler = _this2.props.dropdownItemSelectedHandler;
-				if (typeof rowSelectedHandler === 'function') rowSelectedHandler(suggestion);
-			};
-		},
 		render: function render() {
 			var _this3 = this;
 
 			var createRow = function createRow(suggestion, i) {
-				return React.createElement(Row, { key: i, index: i, selected: _this3.props.selectedIndex == parseInt(i), query: _this3.props.query, onRowClick: _this3.getRowClickHandler(suggestion), suggestion: suggestion });
+				return React.createElement(Row, { key: i, index: i, selected: _this3.props.selectedIndex == parseInt(i), query: _this3.props.query, suggestionSelectedHandler: _this3.props.suggestionSelectedHandler, suggestion: suggestion });
 			};
 			return React.createElement(
 				'table',
@@ -216,7 +212,7 @@ ReactDOM.render(React.createElement(TypeAhead, { dropDownContentClass: AddressMa
 		notifyQueryChanged: function notifyQueryChanged(value) {
 			if (typeof this.props.onQueryChanged === 'function') this.props.onQueryChanged(value);
 		},
-		getDropdownItemSelectedHandler: function getDropdownItemSelectedHandler() {
+		getSuggestionSelectedHandler: function getSuggestionSelectedHandler() {
 			var _this = this;
 
 			return function (datum) {
@@ -287,7 +283,7 @@ ReactDOM.render(React.createElement(TypeAhead, { dropDownContentClass: AddressMa
 		},
 		render: function render() {
 			var dropdownMenuStyle = this.state.dropDownVisible ? { display: 'block', zIndex: '1' } : { display: 'none', position: 'absolute', margin: '0', padding: '0' };
-			var dropdownContentElement = React.createElement(this.props.dropDownContentClass, { query: this.state.value, datums: this.state.datums, selectedIndex: this.state.selectedIndex, dropdownItemSelectedHandler: this.getDropdownItemSelectedHandler() });
+			var dropdownContentElement = React.createElement(this.props.dropDownContentClass, { query: this.state.value, datums: this.state.datums, selectedIndex: this.state.selectedIndex, suggestionSelectedHandler: this.getSuggestionSelectedHandler() });
 			return React.createElement(
 				'div',
 				null,
