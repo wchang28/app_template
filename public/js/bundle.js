@@ -140,7 +140,7 @@ var engine = new GoogleSearchSuggestion();
 
 ReactDOM.render(React.createElement(TypeAhead, { dropDownContentClass: AddressMatch, identity: function identity(o) {
 		return o;
-	}, suggestionEngine: engine, minCharToSearch: 3, onQueryChanged: onQueryChanged }), document.getElementById('test'));
+	}, suggestionEngine: engine, minCharToSearch: 1, onQueryChanged: onQueryChanged }), document.getElementById('test'));
 
 },{"./addressMatch":1,"./googleSearchSuggestion":2,"./typeahead":4,"react":165,"react-dom":36}],4:[function(require,module,exports){
 'use strict';

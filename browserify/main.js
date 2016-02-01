@@ -12,4 +12,4 @@ function onQueryChanged(query) {
 
 var engine = new GoogleSearchSuggestion();
 
-ReactDOM.render(<TypeAhead dropDownContentClass={AddressMatch} identity={(o) => o} suggestionEngine={engine} minCharToSearch={3} onQueryChanged={onQueryChanged}/>, document.getElementById('test'));
+ReactDOM.render(<TypeAhead dropDownContentClass={AddressMatch} identity={(o) => o} suggestionEngine={engine} minCharToSearch={1} onQueryChanged={onQueryChanged}/>, document.getElementById('test'));
