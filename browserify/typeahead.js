@@ -40,10 +40,14 @@
 		1. dropDownContentClass
 		2. suggestionEngine
 		3. onQueryChanged
+		4. minCharToSearch
 	*/
 	var TypeAhead = React.createClass({
 		getInitialState: function() {
 			return {value: '', dropDownVisible: false, datums:[], selectedIndex: -1};
+		}
+		,getMinCharToSearch: function() {
+			return (this.props.minCharToSearch ? this.props.minCharToSearch : 1);
 		}
 		,onDocumentClickHook: function() {this.closeDropDown();}
 		,showDropDown: function() {
@@ -67,11 +71,11 @@
 			};
 		}
 		,doSearch: function(query) {
-			if (query.length >= 2) {
+			if (query.length >= this.getMinCharToSearch()) {
 				var suggestionEngine = this.props.suggestionEngine;
 				suggestionEngine.search(query, (datums) => {
-					console.log('query='+query+',search result:');
-					console.log(JSON.stringify(datums));
+					//console.log('query='+query+',search result:');
+					//console.log(JSON.stringify(datums));
 					this.setState({datums: datums});
 				});
 			}
@@ -91,7 +95,7 @@
 			this.setState({datums: [], selectedIndex: -1});
 			this.changeBuffer.setValue(query);
 			//this.doSearch(query);
-			if (query.length >= 2) {
+			if (query.length >= this.getMinCharToSearch()) {
 				if (!this.state.dropDownVisible) this.showDropDown();
 			} else {
 				if (this.state.dropDownVisible) this.closeDropDown();
