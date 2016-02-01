@@ -64,7 +64,7 @@
 			return React.createElement(
 				'tr',
 				{ style: rowStyle, onMouseEnter: this.onMouseEnter, onMouseLeave: this.onMouseLeave, onClick: function onClick(e) {
-						_this2.porps.suggestionSelectedHandler(_this2.props.suggestion);
+						_this2.props.suggestionSelectedHandler(_this2.props.suggestion);
 					} },
 				this.createRowColumns()
 			);

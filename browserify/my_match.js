@@ -45,7 +45,7 @@
 		,render: function() {
 			var rowStyle = (this.props.selected || this.state.mouseInside ? {backgroundColor:'#f1f1f1'} : null);
 			return (
-				<tr style={rowStyle} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onClick={(e) => {this.porps.suggestionSelectedHandler(this.props.suggestion);}}>{this.createRowColumns()}</tr>
+				<tr style={rowStyle} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onClick={(e) => {this.props.suggestionSelectedHandler(this.props.suggestion);}}>{this.createRowColumns()}</tr>
 			);
 		}
 	});
