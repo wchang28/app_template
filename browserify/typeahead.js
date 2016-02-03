@@ -2,6 +2,7 @@
 	module.exports = factory();
 })(this, function() {
 	var React = require('react');
+	var ReactDOM = require('react-dom');
 	
 	var events = require('events');
 	var EventEmitter = (events.EventEmitter ? events.EventEmitter : events);
@@ -39,15 +40,16 @@
 	properties:
 		1. dropDownContentClass
 		2. suggestionEngine
-		3. onQueryChanged: (value, suggestionSelected) => {}
-		4. minCharToSearch
-		5. identity: (datum) => string
-		6. placeholder
-		7. roundSize (small,medium,large,xxlarge,jumbo)
+		3. dropdownSameWidthAsInput
+		4. onQueryChanged: (value, suggestionSelected) => {}
+		5. minCharToSearch
+		6. identity: (datum) => string
+		7. placeholder
+		8. roundSize (small,medium,large,xxlarge,jumbo)
 	*/
 	var TypeAhead = React.createClass({
 		getInitialState: function() {
-			return {value: '', dropDownVisible: false, datums:[], selectedIndex: -1};
+			return {value: '', dropDownVisible: false, datums:[], selectedIndex: -1, inputWidth:200};
 		}
 		,getMinCharToSearch: function() {
 			return (this.props.minCharToSearch ? this.props.minCharToSearch : 1);
@@ -83,14 +85,25 @@
 				});
 			}
 		}
+		,calcInputControlWidth: function() {
+			var inputWidth = ReactDOM.findDOMNode(this.refs.input).offsetWidth;
+			//console.log('inputWidth=' + inputWidth);
+			this.setState({inputWidth: inputWidth});
+		}
+		,handleWindowResize: function(event ) {
+			this.calcInputControlWidth();
+		}
 		,changeBuffer: new BufferChanges()
 		,componentDidMount: function() {
 			//console.log('componentDidMount()');
 			this.changeBuffer.init();
 			this.changeBuffer.on('change', (query) => {this.doSearch(query);});
+			window.addEventListener( "resize", this.handleWindowResize );
+			this.calcInputControlWidth();
 		}
 		,componentWillUnmount: function() {
 			this.changeBuffer.done();
+			 window.removeEventListener( "resize", this.handleWindowResize );
 		}
 		,handleInputChange: function (event) {
 			var query = event.target.value;
@@ -141,6 +154,7 @@
 			}
 		}
 		,render: function() {
+			var styleParent = {position:'relative', width: '100%'};
 			var roundSize = (this.props.roundSize ? this.props.roundSize : '');
 			var classInput = "w3-input w3-border";
 			var classSuggestionMenu = "w3-card-2";
@@ -148,11 +162,17 @@
 				classInput += " w3-round-" + roundSize;
 				classSuggestionMenu += " w3-round-" + roundSize;
 			}
-			var dropdownMenuStyle = (this.state.dropDownVisible ? {display: 'block', zIndex:'1'} : {display:'none',position:'absolute',margin:'0',padding:'0'});
+			var dropdownMenuStyle = {backgroundColor:'#fff', display:'none',position:'absolute',margin:'0',padding:'0'};
+			if (this.state.dropDownVisible) {
+				dropdownMenuStyle.display = 'block';
+				dropdownMenuStyle.zIndex = '1';
+				if (typeof this.props.dropdownSameWidthAsInput != "boolean" || this.props.dropdownSameWidthAsInput)
+					dropdownMenuStyle.width = this.state.inputWidth.toString() + 'px';
+			}
 			var dropdownContentElement = React.createElement(this.props.dropDownContentClass, {query: this.state.value, datums: this.state.datums, selectedIndex: this.state.selectedIndex, suggestionSelectedHandler: this.getSuggestionSelectedHandler()});
 			return (
-				<div>
-					<input className={classInput} type="text" placeholder={this.props.placeholder} value={this.state.value} onChange={this.handleInputChange} onKeyDown={this.onInputKeyDown}/>
+				<div style={styleParent}>
+					<input ref="input" className={classInput} type="text" placeholder={this.props.placeholder} value={this.state.value} onChange={this.handleInputChange} onKeyDown={this.onInputKeyDown}/>
 					<div style={dropdownMenuStyle} className={classSuggestionMenu}>
 						{dropdownContentElement}
 					</div>
