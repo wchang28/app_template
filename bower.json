@@ -18,6 +18,7 @@
   ],
   "dependencies": {
     "font-awesome": "fontawesome#~4.5.0",
-	"w3-css": "git://github.com/wchang28/w3-css.git"
+    "w3-css": "git://github.com/wchang28/w3-css.git",
+    "skeleton": "~2.0.4"
   }
 }
