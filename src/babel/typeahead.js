@@ -45,7 +45,7 @@
 		5. minCharToSearch
 		6. identity: (datum) => string
 		7. placeholder
-		8. roundSize (small,medium,large,xxlarge,jumbo)
+		8. borderRadius (integer pixel)
 	*/
 	var TypeAhead = React.createClass({
 		getInitialState: function() {
@@ -155,14 +155,13 @@
 		}
 		,render: function() {
 			var styleParent = {position:'relative', width: '100%'};
-			var roundSize = (this.props.roundSize ? this.props.roundSize : '');
-			var classInput = "w3-input w3-border";
-			var classSuggestionMenu = "w3-card-2";
-			if (roundSize !== '') { 
-				classInput += " w3-round-" + roundSize;
-				classSuggestionMenu += " w3-round-" + roundSize;
+			var styleInput = {padding:'8px', display:'block', border:'1px solid #ccc', width:'100%'};
+			var dropdownMenuStyle = {backgroundColor:'#fff', display:'none',position:'absolute',margin:'0',padding:'0', boxShadow:'0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)'};
+			var borderRadius = (this.props.borderRadius ? this.props.borderRadius : null);
+			if (borderRadius) {
+				styleInput.borderRadius = borderRadius.toString() + 'px';
+				dropdownMenuStyle.borderRadius = styleInput.borderRadius; 
 			}
-			var dropdownMenuStyle = {backgroundColor:'#fff', display:'none',position:'absolute',margin:'0',padding:'0'};
 			if (this.state.dropDownVisible) {
 				dropdownMenuStyle.display = 'block';
 				dropdownMenuStyle.zIndex = '1';
@@ -172,8 +171,8 @@
 			var dropdownContentElement = React.createElement(this.props.dropDownContentClass, {query: this.state.value, datums: this.state.datums, selectedIndex: this.state.selectedIndex, suggestionSelectedHandler: this.getSuggestionSelectedHandler()});
 			return (
 				<div style={styleParent}>
-					<input ref="input" className={classInput} type="text" placeholder={this.props.placeholder} value={this.state.value} onChange={this.handleInputChange} onKeyDown={this.onInputKeyDown}/>
-					<div style={dropdownMenuStyle} className={classSuggestionMenu}>
+					<input ref="input" style={styleInput} type="text" placeholder={this.props.placeholder} value={this.state.value} onChange={this.handleInputChange} onKeyDown={this.onInputKeyDown}/>
+					<div style={dropdownMenuStyle}>
 						{dropdownContentElement}
 					</div>
 				</div>

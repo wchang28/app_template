@@ -46,7 +46,7 @@ var promise = engine.initialize();
 
 promise.done(function() {
 	console.log('ready to go!');
-	ReactDOM.render(<TypeAhead dropDownContentClass={MyMatch} identity={(o) => o.Id} suggestionEngine={engine} dropdownSameWidthAsInput={true} minCharToSearch={2} onQueryChanged={onQueryChanged} placeholder="Type something" roundSize="medium"/>, document.getElementById('test'));
+	ReactDOM.render(<TypeAhead dropDownContentClass={MyMatch} identity={(o) => o.Id} suggestionEngine={engine} dropdownSameWidthAsInput={true} minCharToSearch={2} onQueryChanged={onQueryChanged} placeholder="Type something" borderRadius={4}/>, document.getElementById('test'));
 }).fail(function() {
 	console.log('err, something went wrong :('); 
 });

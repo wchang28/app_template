@@ -12,4 +12,4 @@ function onQueryChanged(query, suggestionSelected) {
 
 var engine = new GoogleSearchSuggestion();
 
-ReactDOM.render(<TypeAhead dropDownContentClass={AddressMatch} identity={(o) => o} suggestionEngine={engine} dropdownSameWidthAsInput={true} minCharToSearch={1} onQueryChanged={onQueryChanged} placeholder="Type an address here" roundSize="medium"/>, document.getElementById('test'));
+ReactDOM.render(<TypeAhead dropDownContentClass={AddressMatch} identity={(o) => o} suggestionEngine={engine} dropdownSameWidthAsInput={true} minCharToSearch={1} onQueryChanged={onQueryChanged} placeholder="Type an address here" borderRadius={4}/>, document.getElementById('test'));
