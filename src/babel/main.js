@@ -32,6 +32,7 @@ var datums =
 	,{"Id": "8", "lastName":"Liu", "firstName": "Ling Chu"}
 	,{"Id": "9", "lastName":"Chen", "firstName": "Tiwei"}
 	,{"Id": "10", "lastName":"Sun", "firstName": "James"}
+	,{"Id": "11", "lastName":"Suciu", "firstName": "Nicolae"}
 ]
 			
 var engine = new Bloodhound({
