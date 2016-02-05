@@ -2,6 +2,13 @@
 	module.exports = factory();
 })(this, function() {
 	var React = require('react');
+	
+	var tdStyle = {border:'none', paddingLeft: '8px', paddingTop: '6px', paddingBottom: '6px', paddingRight: '8px', display:'table-cell',textAlign:'left', verticalAlign:'top'};
+	var firstTdStyle = {};
+	for (var i in tdStyle)
+		firstTdStyle[i] = tdStyle[i];
+	firstTdStyle.paddingLeft = '16px';
+	
 	/*
 	properties:
 		1. query - string
@@ -39,7 +46,7 @@
 		,createRowColumns: function () {
 			var suggestion = this.props.suggestion;
 			var rowValues = [suggestion.Id, suggestion.lastName, suggestion.firstName];
-			var createCell = (cellValue, columnIndex) => <td key={columnIndex}>{this.chop(cellValue.toString(), this.props.query, 0)}</td>;
+			var createCell = (cellValue, columnIndex) => <td key={columnIndex} style={columnIndex==0 ? firstTdStyle : tdStyle}>{this.chop(cellValue.toString(), this.props.query, 0)}</td>;
 			//var createCell = (cellValue, columnIndex) => <td key={columnIndex}>{cellValue.toString()}</td>;
 			return rowValues.map(createCell);
 		}
@@ -60,14 +67,16 @@
 	*/
 	var MatchContent = React.createClass({
 		render: function() {
-		var createRow = (suggestion, i) => <Row key={i} index={i} selected={this.props.selectedIndex==parseInt(i)} query={this.props.query} suggestionSelectedHandler={this.props.suggestionSelectedHandler} suggestion={suggestion} />
+			var tableStyle = {borderCollapse: 'collapse', borderSpacing: '0'};
+			var styleTableHeaderRow = {color:'#000', backgroundColor:'#f1f1f1'};
+			var createRow = (suggestion, i) => <Row key={i} index={i} selected={this.props.selectedIndex==parseInt(i)} query={this.props.query} suggestionSelectedHandler={this.props.suggestionSelectedHandler} suggestion={suggestion} />
 			return (
-				<table className="w3-table">
+				<table style={tableStyle}>
 					<thead>
-						<tr className="w3-light-grey">
-							<th>Id</th>
-							<th>Last Name</th>
-							<th>First Name</th>
+						<tr style={styleTableHeaderRow}>
+							<th style={firstTdStyle}>Id</th>
+							<th style={tdStyle}>Last Name</th>
+							<th style={tdStyle}>First Name</th>
 						</tr>
 					</thead>
 					<tbody>{this.props.datums.map(createRow)}</tbody>

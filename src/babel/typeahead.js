@@ -128,7 +128,7 @@
 					else
 						selectedIndex--;
 					this.setState({selectedIndex: selectedIndex});
-					if (selectedIndex>=0 && selectedIndex<this.state.datums.length)	this.setInputText(this.props.identity(this.state.datums[selectedIndex]), false);
+					//if (selectedIndex>=0 && selectedIndex<this.state.datums.length)	this.setInputText(this.props.identity(this.state.datums[selectedIndex]), false);
 				}
 				e.preventDefault();
 			}
@@ -142,7 +142,7 @@
 					else
 						selectedIndex++;
 					this.setState({selectedIndex: selectedIndex});
-					if (selectedIndex>=0 && selectedIndex<this.state.datums.length)	this.setInputText(this.props.identity(this.state.datums[selectedIndex]), false);
+					//if (selectedIndex>=0 && selectedIndex<this.state.datums.length)	this.setInputText(this.props.identity(this.state.datums[selectedIndex]), false);
 				}
 				e.preventDefault();
 			}
