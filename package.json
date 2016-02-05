@@ -9,7 +9,7 @@
   "main": "app.js",
   "license": "MIT",
   "scripts": {
-    "build": "./node_modules/.bin/babel ./src/babel -d ./src/js",
+    "build": "./node_modules/.bin/babel --presets react,es2015 ./src/babel -d ./src/js",
     "bundle": "./node_modules/.bin/browserify ./src/js/main.js -o ./public/js/bundle.js",
     "build_all": "build_all.bat",
 	"bundle_old": "./node_modules/.bin/browserify -t [ babelify --presets [ react es2015] ] ./src/babel/main.js -o ./public/js/bundle.js",

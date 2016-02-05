@@ -5,3 +5,9 @@ bower_components
 logs
 *.log
 npm-debug.log*
+
+
+src/js
+
+
+public/js/bundle.js
