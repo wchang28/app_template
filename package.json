@@ -12,7 +12,7 @@
     "build": "./node_modules/.bin/babel --presets react,es2015 ./src/babel -d ./src/js",
     "bundle": "./node_modules/.bin/browserify ./src/js/main.js -o ./public/js/bundle.js",
     "build_all": "build_all.bat",
-	"bundle_old": "./node_modules/.bin/browserify -t [ babelify --presets [ react es2015] ] ./src/babel/main.js -o ./public/js/bundle.js",
+    "bundle_old": "./node_modules/.bin/browserify -t [ babelify --presets [ react es2015] ] ./src/babel/main.js -o ./public/js/bundle.js",
     "start": "node app.js"
   },
   "repository": {
@@ -25,6 +25,7 @@
     "eventsource-polyfill": "^0.9.6",
     "express": "^4.13.3",
     "jquery": "^2.2.0",
+    "jquery-deferred": "^0.3.0",
     "jquery-no-dom": "git+https://github.com/wchang28/jquery-no-dom.git",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
