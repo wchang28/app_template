@@ -49,7 +49,22 @@
 	*/
 	var TypeAhead = React.createClass({
 		getInitialState: function() {
-			return {value: '', dropDownVisible: false, datums:[], selectedIndex: -1, inputWidth:200};
+			return {
+				value: ''
+				,dropDownVisible: false
+				,datums:[]
+				,selectedIndex: -1
+				,inputWidth:200
+			};
+		}
+		,componentWillReceiveProps: function(nextProps) {
+			this.setState({
+				value: ''
+				,dropDownVisible: false
+				,datums:[]
+				,selectedIndex: -1
+			});
+			this.calcInputControlWidth();
 		}
 		,getMinCharToSearch: function() {
 			return (this.props.minCharToSearch ? this.props.minCharToSearch : 1);
