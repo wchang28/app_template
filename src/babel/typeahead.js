@@ -39,7 +39,7 @@
 	/*
 	properties:
 		1. dropDownContentClass
-		2. suggestionEngine
+		2. search
 		3. dropdownSameWidthAsInput
 		4. onQueryChanged: (value, suggestionSelected) => {}
 		5. minCharToSearch
@@ -77,12 +77,14 @@
 		}
 		,doSearch: function(query) {
 			if (query.length >= this.getMinCharToSearch()) {
-				var suggestionEngine = this.props.suggestionEngine;
-				suggestionEngine.search(query, (datums) => {
-					//console.log('query='+query+',search result:');
-					//console.log(JSON.stringify(datums));
-					this.setState({datums: datums});
-				});
+				var search = this.props.search;
+				if (typeof search === 'function') {
+					search(query, (datums) => {
+						//console.log('query='+query+',search result:');
+						//console.log(JSON.stringify(datums));
+						this.setState({datums: datums});
+					});
+				}
 			}
 		}
 		,calcInputControlWidth: function() {

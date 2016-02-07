@@ -3,6 +3,7 @@ var ReactDOM = require('react-dom');
 var $ = require('jquery');
 var BloodhoundFactory = require('bloodhound');
 var Bloodhound = BloodhoundFactory($);
+var GoogleSearchSuggestion = require('./googleSearchSuggestion');
 require('eventsource-polyfill');
 
 /*
@@ -13,8 +14,11 @@ source.onmessage = function(event) {
 };
 */
 
-var MyMatch = require('./my_match');
 var TypeAhead = require('./typeahead');
+var MyMatch = require('./my_match');
+var AddressMatch = require('./addressMatch');
+
+var engineGoogle = new GoogleSearchSuggestion();
 
 function onQueryChanged(query, suggestionSelected) {
 	console.log('onQueryChanged(' + query + ',' + suggestionSelected + ')');
@@ -47,7 +51,8 @@ var promise = engine.initialize();
 
 promise.done(function() {
 	console.log('ready to go!');
-	ReactDOM.render(<TypeAhead dropDownContentClass={MyMatch} identity={(o) => o.Id} suggestionEngine={engine} dropdownSameWidthAsInput={true} minCharToSearch={2} onQueryChanged={onQueryChanged} placeholder="Type something" borderRadius={4}/>, document.getElementById('test'));
+	ReactDOM.render(<TypeAhead dropDownContentClass={MyMatch} identity={(o) => o.Id} search={$.proxy(engine.search, engine)} dropdownSameWidthAsInput={true} minCharToSearch={2} onQueryChanged={onQueryChanged} placeholder="Type something" borderRadius={4}/>, document.getElementById('test'));
+	ReactDOM.render(<TypeAhead dropDownContentClass={AddressMatch} identity={(o) => o} search={$.proxy(engineGoogle.search, engineGoogle)} dropdownSameWidthAsInput={true} minCharToSearch={1} onQueryChanged={onQueryChanged} placeholder="Type an address here" borderRadius={4}/>, document.getElementById('test_google'));
 }).fail(function() {
 	console.log('err, something went wrong :('); 
 });
