@@ -39,7 +39,7 @@ var datums =
 	,{"Id": "11", "lastName":"Suciu", "firstName": "Nicolae"}
 ]
 			
-var engine = new Bloodhound({
+var engineBloodhound = new Bloodhound({
 	initialize: false,
 	local: datums,
 	identify: (obj) => obj.Id,
@@ -47,12 +47,36 @@ var engine = new Bloodhound({
 	datumTokenizer: (datum) => [datum.Id, datum.lastName, datum.firstName]
 });
 
-var promise = engine.initialize();
+var TestApp = React.createClass({
+	getInitialState: () => ({value: 'Bloodhound'})
+	,onChange: function(e) {
+		this.setState({value: e.target.value});
+	}
+	,render: function() {
+		var type = this.state.value;
+		var dropDownContentClass = (type === 'Bloodhound' ? MyMatch : AddressMatch);
+		var identity = (type === 'Bloodhound' ? (o) => o.Id : (o) => o);
+		var engine = (type === 'Bloodhound' ? engineBloodhound : engineGoogle);
+		var search = $.proxy(engine.search, engine);
+		var minCharToSearch = (type === 'Bloodhound' ? 2 : 1);
+		var placeHolder = (type === 'Bloodhound' ? 'Type something' : 'Type an address here');
+		return (
+			<div>
+				<select className="w3-select w3-border" name="option" onChange={this.onChange} value={this.state.value}>
+				  <option value="Bloodhound">Bloodhound</option>
+				  <option value="Google">Google</option>
+				</select>
+				<TypeAhead dropDownContentClass={dropDownContentClass} identity={identity} search={search} dropdownSameWidthAsInput={true} minCharToSearch={minCharToSearch} onQueryChanged={onQueryChanged} placeholder={placeHolder} borderRadius={4}/>
+			</div>
+		);
+	}
+});
+
+var promise = engineBloodhound.initialize();
 
 promise.done(function() {
 	console.log('ready to go!');
-	ReactDOM.render(<TypeAhead dropDownContentClass={MyMatch} identity={(o) => o.Id} search={$.proxy(engine.search, engine)} dropdownSameWidthAsInput={true} minCharToSearch={2} onQueryChanged={onQueryChanged} placeholder="Type something" borderRadius={4}/>, document.getElementById('test'));
-	ReactDOM.render(<TypeAhead dropDownContentClass={AddressMatch} identity={(o) => o} search={$.proxy(engineGoogle.search, engineGoogle)} dropdownSameWidthAsInput={true} minCharToSearch={1} onQueryChanged={onQueryChanged} placeholder="Type an address here" borderRadius={4}/>, document.getElementById('test_google'));
+	ReactDOM.render(<TestApp/>, document.getElementById('test'));
 }).fail(function() {
 	console.log('err, something went wrong :('); 
 });
