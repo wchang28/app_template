@@ -29,6 +29,7 @@
     "jquery-no-dom": "git+https://github.com/wchang28/jquery-no-dom.git",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
+	"react-typeahead": "git+https://github.com/wchang28/react-typeahead.git",
     "sse-express": "git+https://github.com/wchang28/sse-express.git"
   },
   "devDependencies": {

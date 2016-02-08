@@ -14,7 +14,7 @@ source.onmessage = function(event) {
 };
 */
 
-var TypeAhead = require('./typeahead');
+var TypeAhead = require('react-typeahead');
 var MyMatch = require('./my_match');
 var AddressMatch = require('./addressMatch');
 
