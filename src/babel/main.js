@@ -66,6 +66,7 @@ var TestApp = React.createClass({
 				  <option value="Bloodhound">Bloodhound</option>
 				  <option value="Google">Google</option>
 				</select>
+				<p></p>
 				<TypeAhead dropDownContentClass={dropDownContentClass} identity={identity} search={search} dropdownSameWidthAsInput={true} minCharToSearch={minCharToSearch} onQueryChanged={onQueryChanged} placeholder={placeHolder} borderRadius={4}/>
 			</div>
 		);
