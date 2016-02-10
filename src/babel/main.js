@@ -17,6 +17,7 @@ source.onmessage = function(event) {
 var TypeAhead = require('react-typeahead');
 var MyMatch = require('./my_match');
 var AddressMatch = require('./addressMatch');
+var Login = require('./login');
 
 var engineGoogle = new GoogleSearchSuggestion();
 
@@ -68,6 +69,8 @@ var TestApp = React.createClass({
 				</select>
 				<p></p>
 				<TypeAhead dropDownContentClass={dropDownContentClass} identity={identity} search={search} dropdownSameWidthAsInput={true} minCharToSearch={minCharToSearch} onQueryChanged={onQueryChanged} placeholder={placeHolder} borderRadius={4}/>
+				<p></p>
+				<Login/>
 			</div>
 		);
 	}

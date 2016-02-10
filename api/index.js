@@ -5,6 +5,13 @@ var sse = require('sse-express');
 var router = express.Router();
 router.use(bodyParser.json({'limit': '100mb'}));
 
+router.use(function (req, res, next) {
+	res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+	res.header('Expires', '-1');
+	res.header('Pragma', 'no-cache');
+	next();
+});
+
 // server side events streaming
 router.get('/event_stream', sse(function(req, res) {
 	var interval = setInterval(function() {
