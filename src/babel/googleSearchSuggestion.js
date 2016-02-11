@@ -5,7 +5,7 @@ function GoogleSearchSuggestion() {
 		if (query === '')
 			return [];
 		else {
-			$.getJSON('/api/get_suggestion/?queryString='+encodeURIComponent(query), function(suggestions){
+			$.getJSON('/api/get_suggestion/', {q: query}, function(suggestions){
 				if (typeof onSuggestion === 'function') onSuggestion(suggestions);
 			});
 		}
