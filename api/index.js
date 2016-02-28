@@ -1,4 +1,4 @@
-var router = require('json-api-router');
+var router = require('json-api-router')();
 var sse = require('sse-express');
 
 // server side events streaming
