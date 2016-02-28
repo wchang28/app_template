@@ -24,6 +24,7 @@
     "body-parser": "^1.14.1",
     "eventsource-polyfill": "^0.9.6",
     "express": "^4.13.3",
+    "json-api-router": "git+https://github.com/wchang28/json-api-router.git",
     "jquery": "^2.2.0",
     "jquery-deferred": "^0.3.0",
     "jquery-no-dom": "git+https://github.com/wchang28/jquery-no-dom.git",

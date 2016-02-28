@@ -1,10 +1,5 @@
-var express = require('express');
-var bodyParser = require('body-parser');
+var router = require('json-api-router');
 var sse = require('sse-express');
-
-var router = express.Router();
-router.use(bodyParser.json({'limit': '100mb'}));
-router.use(require('no-cache-express'));
 
 // server side events streaming
 router.get('/event_stream', sse(function(req, res) {
