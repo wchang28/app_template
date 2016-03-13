@@ -14,11 +14,19 @@ router.get('/event_stream', sse(function(req, res) {
 
 var $ = require('jquery-no-dom');
 
-router.get('/get_suggestion', function(req, res) {
-	var queryString = req.query.q;
-	console.log('queryString='+queryString);
-	$.getJSON('http://127.0.0.1/client/query/',{q: queryString}, function(data){
+router.post('/get_suggestion', function(req, res) {
+	var data = req.body;
+	console.log(JSON.stringify(data));
+	$.ajax({
+		type: "POST",
+		url: 'http://127.0.0.1/client/query/',
+		data: JSON.stringify(data),
+		contentType: "application/json; charset=utf-8",
+		dataType: "json"
+	}).done(function(data) {
 		res.jsonp(data);
+	}).fail(function(err){
+		res.jsonp([]);
 	});
 });
 
