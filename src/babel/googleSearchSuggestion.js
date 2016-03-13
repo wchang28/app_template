@@ -5,6 +5,7 @@ function GoogleSearchSuggestion() {
 	this.position = null;
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
+			console.log('position='+JSON.stringify(position));
 			me.position = position;
 		});
 	}
