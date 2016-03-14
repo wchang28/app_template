@@ -24,6 +24,7 @@ router.post('/get_suggestion', function(req, res) {
 		contentType: "application/json; charset=utf-8",
 		dataType: "json"
 	}).done(function(data) {
+		console.log('I am here ' + JSON.stringify(data));
 		res.jsonp(data);
 	}).fail(function(err){
 		res.jsonp([]);
