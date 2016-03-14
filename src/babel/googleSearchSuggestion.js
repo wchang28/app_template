@@ -17,6 +17,7 @@ function GoogleSearchSuggestion() {
 		*/
 		return pos;
 	}
+	/*
 	function getGeolocation(onDone) {
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(function(position) {
@@ -27,6 +28,16 @@ function GoogleSearchSuggestion() {
 		} else {
 			if (typeof onDone === 'function') onDone(null);
 		}		
+	}*/
+	function getGeolocation(onDone) {
+		var pos = {
+			coords: {
+				latitude: 34.1197226
+				,longitude: -118.0735079
+				,accuracy: 69
+			}
+		};
+		if (typeof onDone === 'function') onDone(pos);
 	}
 	this.search = function(query, onSuggestion) {
 		if (query === '') {
