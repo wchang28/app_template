@@ -4,7 +4,8 @@ function GoogleSearchSuggestion() {
 	function getGeolocation(onDone) {
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(function(position) {
-				console.log('position='+JSON.stringify(position));
+				console.log('latitude='+position.coords.latitude);
+				console.log('longitude='+position.coords.longitude);
 				if (typeof onDone === 'function') onDone(position);
 			});
 		} else {
