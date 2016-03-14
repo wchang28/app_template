@@ -9,10 +9,12 @@ function GoogleSearchSuggestion() {
 		pos.coords.latitude = position.coords.latitude;
 		pos.coords.longitude = position.coords.longitude;
 		pos.coords.accuracy = position.coords.accuracy;
+		/*
 		if (typeof position.coords.altitude === 'number') pos.coords.altitude = position.coords.altitude;
 		if (typeof position.coords.altitudeAccuracy === 'number') pos.coords.altitudeAccuracy = position.coords.altitudeAccuracy;
 		if (typeof position.coords.heading === 'number') pos.coords.heading = position.coords.heading;
 		if (typeof position.coords.speed === 'number') pos.coords.speed = position.coords.speed;
+		*/
 		return pos;
 	}
 	function getGeolocation(onDone) {
