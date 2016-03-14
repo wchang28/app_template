@@ -44,6 +44,7 @@ function GoogleSearchSuggestion() {
 					contentType: "application/json; charset=utf-8",
 					dataType: "json"
 				}).done(function(suggestions) {
+					console.log('I am here suggestions=' + JSON.stringify(suggestions));
 					if (typeof onSuggestion === 'function') onSuggestion(suggestions);
 				}).fail(function(err){
 					if (typeof onSuggestion === 'function') onSuggestion([]);
