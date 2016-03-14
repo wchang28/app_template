@@ -4,7 +4,7 @@ function GoogleSearchSuggestion() {
 	function position2JSON(position) {
 		var pos = {
 			coords: {}
-			timestamp: position.timestamp
+			,timestamp: position.timestamp
 		};
 		pos.coords.latitude = position.coords.latitude;
 		pos.coords.longitude = position.coords.longitude;
