@@ -4,7 +4,7 @@ var sse = require('sse-express');
 // server side events streaming
 router.get('/event_stream', sse(function(req, res) {
 	var interval = setInterval(function() {
-		res.sseSend({'event': 'ERROR', 'content': {'exception':'something is wrong'}});
+		res.sseSend({'event': 'ERROR', 'content': {'exception':'something is wrong' + new Date().toString()}});
 	}, 3000);
 	return interval;
 }, function(req, res, interval) {
