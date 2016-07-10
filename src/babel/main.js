@@ -6,13 +6,11 @@ var Bloodhound = BloodhoundFactory($);
 var GoogleSearchSuggestion = require('./googleSearchSuggestion');
 require('eventsource-polyfill');
 
-/*
 var source = new EventSource("/api/event_stream");
 source.onmessage = function(event) {
 	var o = JSON.parse(event.data);
 	console.log('message: ' + JSON.stringify(o));
 };
-*/
 
 var TypeAhead = require('react-typeahead');
 var MyMatch = require('./my_match');
